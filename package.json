@@ -1,0 +1,25 @@
+{
+  "name": "rss-pipes",
+  "description": "RSS feed aggregator by Node.js",
+  "version": "0.1.0",
+  "author": "Daishi Kato <daishi@axlight.com>",
+  "dependencies": {
+    "express": "~3.1.0",
+    "rss": "0.0.4",
+    "request": "~2.14.0",
+    "jade": "~0.28.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dai-shi/rss-pipes.git"
+  },
+  "keywords": [
+    "feed",
+    "rss",
+    "atom"
+  ],
+  "license": "BSD",
+  "engines": {
+    "node": "~0.6.19"
+  }
+}
