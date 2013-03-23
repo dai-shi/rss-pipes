@@ -7,7 +7,14 @@
     "express": "~3.1.0",
     "rss": "0.0.4",
     "request": "~2.14.0",
-    "jade": "~0.28.2"
+    "jade": "~0.28.2",
+    "jugglingdb": "~0.2.0-23",
+    "jugglingdb-postgres": "0.0.1-5",
+    "jugglingdb-sqlite3": "0.0.2"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "karma": "*"
   },
   "repository": {
     "type": "git",
