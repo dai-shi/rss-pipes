@@ -9,11 +9,11 @@
     "jade": "~0.28.2",
     "jugglingdb": "~0.2.0-23",
     "jugglingdb-postgres": "0.0.1-5",
-    "jugglingdb-sqlite3": "0.0.2",
     "feedparser": "~0.13.4",
     "async": "~0.2.6"
   },
   "devDependencies": {
+    "jugglingdb-sqlite3": "*",
     "mocha": "*",
     "karma": "*"
   },

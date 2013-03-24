@@ -1,0 +1,36 @@
+!!!
+html(ng-app="MainModule")#ng-app
+  head
+    meta(charset="utf-8")
+    meta(content="chrome=1", http-equiv="X-UA-Compatible")
+    meta(content="width=device-width, initial-scale=1, user-scalable=no", name="viewport")
+    title RSS Pipes
+    link(href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css", rel="stylesheet")
+    script(src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js")
+    script(src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js")
+    script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.min.js")
+    script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular-resource.min.js")
+    script(src="js/common.js")
+    script(src="js/main.js")
+  body(ng-init="lang = '#{lang}'")
+    .navbar.navbar-fixed-top
+      .navbar-inner
+        ul.nav
+          li
+            a(href="#/home")
+              strong RSS Pipes
+          li
+            a(href="#/home")
+              span(class="icon-home")
+              - if (lang === 'ja')
+                | ホーム
+              - else
+                | Home
+    .container
+      .row &nbsp;
+      .row &nbsp;
+      .row &nbsp;
+      .alert(ng-repeat="mainAlert in mainAlerts", class="alert-{{mainAlert.type}}")
+        button.close(ng-init="autoDismissAlert(mainAlert);", ng-click="dismissAlert(mainAlert);") &times;
+        span(ng-bind="mainAlert.message")
+      .ng-view

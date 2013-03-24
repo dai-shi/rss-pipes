@@ -1,0 +1,49 @@
+.container
+  form
+    fieldset
+    legend
+      - if (lang === 'ja')
+        | 新規追加
+      - else
+        | Create New Aggregator
+    label
+      - if (lang === 'ja')
+        | 名前 ("/"区切り)
+      - else
+        | Name (separated by "/")
+    input(type="text", placeholder="food/japanese/sushi", ng-model="newAgg.name")
+    
+    label
+      - if (lang === 'ja')
+        | 説明文 (他人にも分かるように)
+      - else
+        | Description
+    textarea(ng-model="newAgg.description")
+
+    label
+      - if (lang === 'ja')
+        | フィードURL (改行区切り)
+      - else
+        | Feed URLs (separated by lines)
+    textarea(ng-model="newAgg.feeds")
+
+    label.checkbox
+      input(type="checkbox", ng-model="newAgg.browsable", ng-init="newAgg.browsable = true")
+      - if (lang === 'ja')
+        | 閲覧可能 (名前を知らなくても)
+      - else
+        | Browsable (without knowing the name)
+
+    button.btn(ng-click="createNewAggregator()")
+      - if (lang === 'ja')
+        | 追加
+      - else
+        | Create
+hr
+.container
+  div(ng-repeat="aggregator in aggregators")
+    .well
+      div(ng-bind="aggregator.name")
+      div(ng-bind="aggregator.description")
+      div(ng-bind="aggregator.feeds")
+      //- TODO: better layout, edit button

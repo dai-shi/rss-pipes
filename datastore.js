@@ -93,10 +93,9 @@ function listAggregators(callback) {
 }
 
 
-//TODOs
-//update
-//expire
-//import&export (admin)
+//TODO update aggregator
+//TODO expire aggregator (based on last access)
+//TODO import&export (admin)
 
 exports.getAggregator = getAggregator;
 exports.createNewAggregator = createNewAggregator;

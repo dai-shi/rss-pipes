@@ -32,17 +32,17 @@ var feedparser = require('feedparser');
 var rss = require('rss');
 var datastore = require('./datastore.js');
 
+var encodeAggregatorName = require('./public/js/common.js').encodeAggregatorName;
+var sitePrefix = require('./public/js/common.js').sitePrefix;
+
 var app = express();
 app.configure(function() {
   app.use(express.logger());
+  app.use(express.json());
   app.set('views', path.join(__dirname, 'views'));
   app.set('view engine', 'jade');
 });
 
-
-function encodeAggregatorName(name) {
-  return name.split('/').map(encodeURIComponent).join('/');
-}
 
 function generateRss(aggregatorName, options, callback) {
   datastore.getAggregator(aggregatorName, function(err, agg) {
@@ -66,12 +66,14 @@ function generateRss(aggregatorName, options, callback) {
       }, function(err, articlesArray) {
         // we assume err is always null.
         var allArticles = [].concat.apply([], articlesArray);
-        //TODO filter them
-        var feed_url = 'http://rss-pipes.herokuapp.com/aggregator/' + encodeAggregatorName(aggregatorName) + '.rss';
+        //TODO filter articles
+        var feed_url = sitePrefix + '/aggregator/' + encodeAggregatorName(aggregatorName) + '.rss';
+        var site_url = sitePrefix + '/static/main.html#/edit?name=' + encodeURIComponent(aggregatorName);
         var feed = new rss({
-          title: 'RSS pipes: ' + aggregatorName,
+          title: aggregatorName + ' by RSS Pipes',
+          description: agg.description,
           feed_url: feed_url,
-          site_url: feed_url
+          site_url: site_url
         });
         allArticles.forEach(function(article) {
           feed.item({
@@ -97,7 +99,7 @@ app.get(new RegExp('^/aggregator/(.+)\\.rss$'), function(req, res) {
   var aggregatorName = req.params[0];
   generateRss(aggregatorName, req.query, function(err, result) {
     if (err) {
-      console.log('failed in generateRss', err);
+      console.log('failed in generateRss:', err);
       res.send(500, 'failed generating rss');
     } else {
       res.send(result);
@@ -105,6 +107,52 @@ app.get(new RegExp('^/aggregator/(.+)\\.rss$'), function(req, res) {
   });
 });
 
+app.get('/rest/aggregators', function(req, res) {
+  datastore.listAggregators(function(err, result) {
+    if (err) {
+      console.log('failed in listAggregators:', err);
+      res.send(500, 'failed listing aggregators');
+    } else {
+      res.json(result);
+    }
+  });
+});
+
+app.post('/rest/aggregators', function(req, res) {
+  datastore.createNewAggregator(req.body, function(err) {
+    if (err) {
+      console.log('failed in createNewAggregator:', err);
+      res.send(500, 'failed creating an aggregator');
+    } else {
+      res.json(true);
+    }
+  });
+});
+
+app.get(new RegExp('^/rest/aggregators/(.+)$'), function(req, res) {
+  var aggregatorName = req.params[0];
+  datastore.getAggregator(aggregatorName, function(err, result) {
+    if (err) {
+      console.log('failed in getAggregator:', err);
+      res.send(500, 'failed getting an aggregator');
+    } else {
+      res.json(result);
+    }
+  });
+});
+
+//TODO update an aggregator
+
+app.get(new RegExp('^/static/(.+)\\.html$'), function(req, res) {
+  var view_name = req.params[0];
+  var lang = '';
+  if (req.headers['accept-language']) {
+    lang = req.headers['accept-language'].substring(0, 2);
+  }
+  res.render(view_name, {
+    lang: lang
+  });
+});
 
 app.use('/static', express.static(path.join(__dirname, 'public')));
 
