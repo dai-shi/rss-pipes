@@ -27,8 +27,10 @@
 
 var express = require('express');
 var path = require('path');
-var request = require('request');
+var async = require('async');
+var feedparser = require('feedparser');
 var rss = require('rss');
+var datastore = require('./datastore.js');
 
 var app = express();
 app.configure(function() {
@@ -37,9 +39,72 @@ app.configure(function() {
   app.set('view engine', 'jade');
 });
 
+
+function encodeAggregatorName(name) {
+  return name.split('/').map(encodeURIComponent).join('/');
+}
+
+function generateRss(aggregatorName, options, callback) {
+  datastore.getAggregator(aggregatorName, function(err, agg) {
+    if (err) {
+      callback(err);
+      return;
+    }
+    var urls = agg.feeds.split('\n');
+    async.map(urls, function(url, cb) {
+      if (!url) {
+        cb([]);
+        return;
+      }
+      feedparser.parserUrl(url, function(err, meta, articles) {
+        if (err) {
+          console.log('error by aggregator "' + aggregatorName + '" in parsing "' + url + '":', err);
+          cb(null, []);
+          return;
+        }
+        cb(null, articles);
+      }, function(err, articlesArray) {
+        // we assume err is always null.
+        var allArticles = [].concat.apply([], articlesArray);
+        //TODO filter them
+        var feed_url = 'http://rss-pipes.herokuapp.com/aggregator/' + encodeAggregatorName(aggregatorName) + '.rss';
+        var feed = new rss({
+          title: 'RSS pipes: ' + aggregatorName,
+          feed_url: feed_url,
+          site_url: feed_url
+        });
+        allArticles.forEach(function(article) {
+          feed.item({
+            title: article.title,
+            description: article.description,
+            url: article.link,
+            guid: article.guid,
+            author: article.author,
+            date: article.date
+          });
+        });
+        callback(null, feed.xml());
+      });
+    });
+  });
+}
+
 app.get('/', function(req, res) {
   res.send('It works!');
 });
+
+app.get(new RegExp('^/aggregator/(.+)\\.rss$'), function(req, res) {
+  var aggregatorName = req.params[0];
+  generateRss(aggregatorName, req.query, function(err, result) {
+    if (err) {
+      console.log('failed in generateRss', err);
+      res.send(500, 'failed generating rss');
+    } else {
+      res.send(result);
+    }
+  });
+});
+
 
 app.use('/static', express.static(path.join(__dirname, 'public')));
 
