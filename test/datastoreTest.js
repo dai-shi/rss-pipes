@@ -1,14 +1,27 @@
+/* global before: true */
+
 var assert = require('assert');
 var fs = require('fs');
 
-var tmp_test_db = './.datastore.db.tmp';
-if (fs.existsSync(tmp_test_db)) {
-  fs.unlinkSync(tmp_test_db);
-}
-process.env.SQLITE_DB_FILE = tmp_test_db;
-var datastore = require('../datastore.js');
 
 describe('basic test for datastore', function() {
+  var datastore;
+
+  before(function(done) {
+    var tmp_test_db = './.datastore.db.tmp';
+    var callback = function() {
+      process.env.SQLITE_DB_FILE = tmp_test_db;
+      datastore = require('../datastore.js');
+      done();
+    };
+    fs.exists(tmp_test_db, function(exists) {
+      if (exists) {
+        fs.unlink(tmp_test_db, callback);
+      } else {
+        callback();
+      }
+    });
+  });
 
   it('should fail to create a new empty agg', function(done) {
     datastore.createNewAggregator({}, function(err) {
@@ -78,6 +91,30 @@ describe('basic test for datastore', function() {
       assert.ifError(err);
       assert.equal(result.length, 2);
       assert.ok((result[0].name === 'hoge' && result[1].name === 'hoge2') || (result[1].name === 'hoge' && result[0].name === 'hoge2'));
+      done();
+    });
+  });
+
+  it('should update an agg', function(done) {
+    datastore.updateAggregator({
+      name: 'hoge',
+      description: 'newdesc'
+    }, function(err) {
+      assert.ifError(err);
+      datastore.getAggregator('hoge', function(err, result) {
+        assert.ifError(err);
+        assert.equal(result.description, 'newdesc');
+        done();
+      });
+    });
+  });
+
+  it('should faile to update non-existent agg', function(done) {
+    datastore.updateAggregator({
+      name: 'non-hoge',
+      description: 'newdesc'
+    }, function(err) {
+      assert.ok(err);
       done();
     });
   });

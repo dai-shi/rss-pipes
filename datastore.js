@@ -75,12 +75,17 @@ function createNewAggregator(params, callback) {
     return;
   }
   getAggregator(params.name, function(err, agg) {
+    if (err) {
+      callback(err);
+      return;
+    }
     if (agg) {
       callback('already exists');
-    } else {
-      var agg = new Aggregator(params);
-      agg.save(callback);
+      return;
     }
+
+    var agg = new Aggregator(params);
+    agg.save(callback);
   });
 }
 
@@ -92,11 +97,36 @@ function listAggregators(callback) {
   }, callback);
 }
 
+function updateAggregator(params, callback) {
+  if (!params.name) {
+    callback('name is required.');
+    return;
+  }
+  getAggregator(params.name, function(err, agg) {
+    if (err) {
+      callback(err);
+      return;
+    }
+    if (!agg) {
+      callback('no such aggregator');
+      return;
+    }
 
-//TODO update aggregator
+    ['name', 'description', 'feeds', 'filter', 'browsable'].forEach(function(key) {
+      var val = params[key];
+      if (val) {
+        agg[key] = val;
+      }
+    });
+    agg.save(callback);
+  });
+}
+
+
 //TODO expire aggregator (based on last access)
 //TODO import&export (admin)
 
 exports.getAggregator = getAggregator;
 exports.createNewAggregator = createNewAggregator;
 exports.listAggregators = listAggregators;
+exports.updateAggregator = updateAggregator;
