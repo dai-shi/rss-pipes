@@ -25,8 +25,9 @@
 /* jshint es5: true */
 /* jshint evil: true */
 
-var express = require('express');
+var vm = require('vm');
 var path = require('path');
+var express = require('express');
 var async = require('async');
 var feedparser = require('feedparser');
 var rss = require('rss');
@@ -43,6 +44,34 @@ app.configure(function() {
   app.set('view engine', 'jade');
 });
 
+function filterArticles(articles, filterStr) {
+  try {
+    var newArticles = [];
+    var seen = {};
+    var filter = filterStr && vm.createScript('(' + filterStr + ')(article);');
+    articles.forEach(function(article) {
+      var newArticle = true;
+      if (filter) {
+        newArticle = filter.runInNewContext({
+          article: article
+        });
+      }
+      if (newArticle) {
+        if (newArticle.title && newArticle.description && newArticles.link) {
+          article = newArticle;
+        }
+        if (!seen[article.link]) {
+          newArticles.push(article);
+          seen[article.line] = true;
+        }
+      }
+    });
+    articles = newArticles;
+  } catch (e) {
+    console.log('filterArticles error:', e);
+  }
+  return articles;
+}
 
 function generateRss(aggregatorName, options, callback) {
   datastore.getAggregator(aggregatorName, function(err, agg) {
@@ -66,7 +95,9 @@ function generateRss(aggregatorName, options, callback) {
       }, function(err, articlesArray) {
         // we assume err is always null.
         var allArticles = [].concat.apply([], articlesArray);
-        //TODO filter articles
+        if (agg.filter) {
+          allArticles = filterArticles(allArticles, agg.filter);
+        }
         var feed_url = sitePrefix + '/aggregator/' + encodeAggregatorName(aggregatorName) + '.rss';
         var site_url = sitePrefix + '/static/main.html#/edit?name=' + encodeURIComponent(aggregatorName);
         var feed = new rss({
@@ -141,7 +172,27 @@ app.get(new RegExp('^/rest/aggregators/(.+)$'), function(req, res) {
   });
 });
 
-//TODO update an aggregator
+app.put(new RegExp('^/rest/aggregators/(.+)$'), function(req, res) {
+  var aggregatorName = req.params[0];
+  if (req.body.name) {
+    if (req.body.name !== aggregatorName) {
+      res.send(500, 'unmatched aggregator name');
+      return;
+    }
+  } else {
+    req.body.name = aggregatorName;
+  }
+
+  datastore.udateAggregator(req.body, function(err, result) {
+    if (err) {
+      console.log('failed in updateAggregator:', err);
+      res.send(500, 'failed updating an aggregator');
+    } else {
+      res.json(result);
+    }
+  });
+});
+
 
 app.get(new RegExp('^/static/(.+)\\.html$'), function(req, res) {
   var view_name = req.params[0];
