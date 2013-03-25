@@ -127,7 +127,10 @@ aggregatorServices.factory('Aggregator', ['$resource', function($resource) {
       isArray: true
     },
     create: {
-      method: 'POST'
+      method: 'POST',
+      params: {
+        name: null
+      }
     },
     fetch: {
       method: 'GET'
