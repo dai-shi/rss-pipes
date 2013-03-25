@@ -5,6 +5,8 @@ html(ng-app="MainModule")#ng-app
     meta(content="chrome=1", http-equiv="X-UA-Compatible")
     meta(content="width=device-width, initial-scale=1, user-scalable=no", name="viewport")
     title RSS Pipes
+    style
+      body { padding-top: 60px; }
     link(href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css", rel="stylesheet")
     script(src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js")
     script(src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js")
@@ -27,9 +29,6 @@ html(ng-app="MainModule")#ng-app
               - else
                 | Home
     .container
-      .row &nbsp;
-      .row &nbsp;
-      .row &nbsp;
       .alert(ng-repeat="mainAlert in mainAlerts", class="alert-{{mainAlert.type}}")
         button.close(ng-init="autoDismissAlert(mainAlert);", ng-click="dismissAlert(mainAlert);") &times;
         span(ng-bind="mainAlert.message")

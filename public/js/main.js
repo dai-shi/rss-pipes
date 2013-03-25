@@ -27,25 +27,53 @@
 /* global angular: false */
 /* global common: false */
 
-var AggregatorCtrl = ['$scope', 'Aggregator', function($scope, Aggregator) {
+var AggregatorListCtrl = ['$scope', 'Aggregator', function($scope, Aggregator) {
   $scope.aggregators = Aggregator.list();
   $scope.createNewAggregator = function() {
     Aggregator.create($scope.newAgg, function() {
       $scope.newAgg = {
         browsable: true
       };
-      var mainAlert = {
+      $scope.mainAlerts.push({
         type: 'success',
         message: ($scope.lang === 'ja' ? '追加完了しました' : 'Done creating.')
-      };
-      $scope.mainAlerts.push(mainAlert);
+      });
       $scope.aggregators = Aggregator.list();
     }, function() {
-      var mainAlert = {
+      $scope.mainAlerts.push({
         type: 'error',
         message: ($scope.lang === 'ja' ? '追加できませんでした' : 'Failed creating.')
-      };
-      $scope.mainAlerts.push(mainAlert);
+      });
+    });
+  };
+}];
+
+var AggregatorEditCtrl = ['$scope', '$routeParams', '$http', 'Aggregator', function($scope, $routeParams, $http, Aggregator) {
+  $scope.paramName = $routeParams.name;
+  Aggregator.fetch({
+    name: $scope.paramName
+  }, function(data) {
+    data.browsable = !! data.browsable;
+    $scope.aggregator = data;
+  });
+
+  $scope.updateAggregator = function() {
+    Aggregator.update($scope.aggregator, function() {
+      $scope.mainAlerts.push({
+        type: 'success',
+        message: ($scope.lang === 'ja' ? '更新しました' : 'Done updating.')
+      });
+
+      var rssUrl = common.sitePrefix + '/aggregator/' + common.encodeAggregatorName($scope.paramName) + '.rss';
+      $http.get(rssUrl).success(function(data) {
+        console.log(data);
+      });
+      //TODO show RSS
+    }, function() {
+      $scope.mainAlerts.push({
+        type: 'error',
+        message: ($scope.lang === 'ja' ? '更新できませんでした' : 'Failed updating.')
+      });
     });
   };
 }];
@@ -56,7 +84,11 @@ mainModule.config(['$routeProvider', function($routeProvider) {
   $routeProvider.
   when('/home', {
     templateUrl: 'partials/home.html',
-    controller: AggregatorCtrl
+    controller: AggregatorListCtrl
+  }).
+  when('/edit', {
+    templateUrl: 'partials/edit.html',
+    controller: AggregatorEditCtrl
   }).
   otherwise({
     redirectTo: '/home'
@@ -87,13 +119,21 @@ mainModule.run(['$rootScope', function($rootScope) {
 var aggregatorServices = angular.module('AggregatorServices', ['ngResource']);
 
 aggregatorServices.factory('Aggregator', ['$resource', function($resource) {
-  return $resource('../rest/aggregators', {}, {
+  return $resource('../rest/aggregators/:name', {
+    name: '@name'
+  }, {
     list: {
       method: 'GET',
       isArray: true
     },
     create: {
       method: 'POST'
+    },
+    fetch: {
+      method: 'GET'
+    },
+    update: {
+      method: 'PUT'
     }
   });
 }]);

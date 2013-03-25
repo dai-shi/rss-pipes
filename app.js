@@ -185,7 +185,7 @@ app.put(new RegExp('^/rest/aggregators/(.+)$'), function(req, res) {
     req.body.name = aggregatorName;
   }
 
-  datastore.udateAggregator(req.body, function(err, result) {
+  datastore.updateAggregator(req.body, function(err, result) {
     if (err) {
       console.log('failed in updateAggregator:', err);
       res.send(500, 'failed updating an aggregator');

@@ -115,9 +115,8 @@ function updateAggregator(params, callback) {
     }
 
     ['name', 'description', 'feeds', 'filter', 'browsable'].forEach(function(key) {
-      var val = params[key];
-      if (val) {
-        agg[key] = val;
+      if (params.hasOwnProperty(key)) {
+        agg[key] = params[key];
       }
     });
     agg.save(callback);
