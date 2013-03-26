@@ -3,9 +3,9 @@
     fieldset
     legend
       - if (lang === 'ja')
-        | 編集
+        | 更新登録
       - else
-        | Edit Aggregator
+        | Update Aggregator
     label
       - if (lang === 'ja')
         | 名前 ("/"区切り)
@@ -38,7 +38,7 @@
 
     button.btn(ng-click="updateAggregator()")
       - if (lang === 'ja')
-        | 更新
+        | 更新登録
       - else
         | Update
 hr
