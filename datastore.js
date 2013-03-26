@@ -24,6 +24,8 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+var aggregatorNameRegExp = require('./public/js/common.js').aggregatorNameRegExp;
+
 var Schema = require('jugglingdb').Schema;
 var schema;
 if (process.env.DATABASE_URL) {
@@ -74,6 +76,10 @@ function getAggregator(name, callback) {
 function createNewAggregator(params, callback) {
   if (!params.name || !params.description || !params.feeds) {
     callback('name and description and feeds are required.');
+    return;
+  }
+  if (!aggregatorNameRegExp.test(params.name)) {
+    callback('invalid name format');
     return;
   }
   getAggregator(params.name, function(err, agg) {

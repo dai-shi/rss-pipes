@@ -29,3 +29,5 @@ var common = (typeof exports !== 'undefined' ? exports : {});
 common.encodeAggregatorName = function(name) {
   return name.split('/').map(encodeURIComponent).join('/');
 };
+
+common.aggregatorNameRegExp = new RegExp('[^\\s/][^\\t\\r\\n]+[^\\s/]');
