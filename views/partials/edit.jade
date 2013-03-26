@@ -43,4 +43,8 @@
         | Update
 hr
 .container
-  hoge
+  .rss-doc(ng-show="rssDoc")
+    h3.rss-title(ng-bind="rssDoc.find('channel > title').text()")
+    ul
+      li(ng-repeat="itemEle in rssDoc.find('item').get()")
+        a(ng-href="{{jQuery(itemEle).find('link').text()}}", ng-bind="jQuery(itemEle).find('title').text()")

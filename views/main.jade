@@ -14,7 +14,7 @@ html(ng-app="MainModule")#ng-app
     script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular-resource.min.js")
     script(src="js/common.js")
     script(src="js/main.js")
-  body(ng-init="lang = '#{lang}'")
+  body(ng-init="lang = '#{lang}'; sitePrefix = '#{sitePrefix}';")
     .navbar.navbar-fixed-top
       .navbar-inner
         ul.nav

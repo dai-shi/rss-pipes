@@ -26,8 +26,6 @@
 
 var common = (typeof exports !== 'undefined' ? exports : {});
 
-common.sitePrefix = 'http://rss-pipes.herokuapp.com';
-
 common.encodeAggregatorName = function(name) {
   return name.split('/').map(encodeURIComponent).join('/');
 };

@@ -50,6 +50,7 @@ var AggregatorListCtrl = ['$scope', 'Aggregator', function($scope, Aggregator) {
 
 var AggregatorEditCtrl = ['$scope', '$routeParams', '$http', 'Aggregator', function($scope, $routeParams, $http, Aggregator) {
   $scope.paramName = $routeParams.name;
+  $scope.jQuery = jQuery;
   Aggregator.fetch({
     name: $scope.paramName
   }, function(data) {
@@ -64,11 +65,10 @@ var AggregatorEditCtrl = ['$scope', '$routeParams', '$http', 'Aggregator', funct
         message: ($scope.lang === 'ja' ? '更新しました' : 'Done updating.')
       });
 
-      var rssUrl = common.sitePrefix + '/aggregator/' + common.encodeAggregatorName($scope.paramName) + '.rss';
+      var rssUrl = $scope.sitePrefix + '/aggregator/' + common.encodeAggregatorName($scope.paramName) + '.rss';
       $http.get(rssUrl).success(function(data) {
-        console.log(data);
+        $scope.rssDoc = $($.parseXML(data));
       });
-      //TODO show RSS
     }, function() {
       $scope.mainAlerts.push({
         type: 'error',

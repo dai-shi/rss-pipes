@@ -36,7 +36,8 @@ var rss = require('rss');
 var datastore = require('./datastore.js');
 
 var encodeAggregatorName = require('./public/js/common.js').encodeAggregatorName;
-var sitePrefix = require('./public/js/common.js').sitePrefix;
+
+var sitePrefix = process.env.SITE_PREFIX || 'http://rss-pipes.herokuapp.com';
 
 var app = express();
 app.configure(function() {
@@ -87,39 +88,41 @@ function generateRss(aggregatorName, options, callback) {
         cb([]);
         return;
       }
-      feedparser.parserUrl(url, function(err, meta, articles) {
+      feedparser.parseUrl(url, function(err, meta, articles) {
         if (err) {
           console.log('error by aggregator "' + aggregatorName + '" in parsing "' + url + '":', err);
           cb(null, []);
           return;
         }
         cb(null, articles);
-      }, function(err, articlesArray) {
-        // we assume err is always null.
-        var allArticles = [].concat.apply([], articlesArray);
-        if (agg.filter) {
-          allArticles = filterArticles(allArticles, agg.filter);
-        }
-        var feed_url = sitePrefix + '/aggregator/' + encodeAggregatorName(aggregatorName) + '.rss';
-        var site_url = sitePrefix + '/static/main.html#/edit?name=' + encodeURIComponent(aggregatorName);
-        var feed = new rss({
-          title: aggregatorName + ' by RSS Pipes',
-          description: agg.description,
-          feed_url: feed_url,
-          site_url: site_url
-        });
-        allArticles.forEach(function(article) {
-          feed.item({
-            title: article.title,
-            description: article.description,
-            url: article.link,
-            guid: article.guid,
-            author: article.author,
-            date: article.date
-          });
-        });
-        callback(null, feed.xml());
       });
+    },
+
+    function(err, articlesArray) {
+      // we assume err is always null.
+      var allArticles = [].concat.apply([], articlesArray);
+      if (agg.filter) {
+        allArticles = filterArticles(allArticles, agg.filter);
+      }
+      var feed_url = sitePrefix + '/aggregator/' + encodeAggregatorName(aggregatorName) + '.rss';
+      var site_url = sitePrefix + '/static/main.html#/edit?name=' + encodeURIComponent(aggregatorName);
+      var feed = new rss({
+        title: aggregatorName + ' by RSS Pipes',
+        description: agg.description,
+        feed_url: feed_url,
+        site_url: site_url
+      });
+      allArticles.forEach(function(article) {
+        feed.item({
+          title: article.title,
+          description: article.description,
+          url: article.link,
+          guid: article.guid,
+          author: article.author,
+          date: article.date
+        });
+      });
+      callback(null, feed.xml());
     });
   });
 }
@@ -203,7 +206,8 @@ app.get(new RegExp('^/static/(.+)\\.html$'), function(req, res) {
     lang = req.headers['accept-language'].substring(0, 2);
   }
   res.render(view_name, {
-    lang: lang
+    lang: lang,
+    sitePrefix: sitePrefix
   });
 });
 
