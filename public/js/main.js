@@ -58,17 +58,22 @@ var AggregatorEditCtrl = ['$scope', '$routeParams', '$http', 'Aggregator', funct
     $scope.aggregator = data;
   });
 
+  $scope.getRssContent = function() {
+    var rssUrl = $scope.sitePrefix + '/aggregator/' + common.encodeAggregatorName($scope.paramName) + '.rss';
+    $http.get(rssUrl).success(function(data) {
+      $scope.rssDoc = jQuery($.parseXML(data));
+    });
+  };
+  $scope.getRssContent();
+
   $scope.updateAggregator = function() {
+    $scope.rssDoc = null;
     Aggregator.update($scope.aggregator, function() {
       $scope.mainAlerts.push({
         type: 'success',
         message: ($scope.lang === 'ja' ? '更新しました' : 'Done updating.')
       });
-
-      var rssUrl = $scope.sitePrefix + '/aggregator/' + common.encodeAggregatorName($scope.paramName) + '.rss';
-      $http.get(rssUrl).success(function(data) {
-        $scope.rssDoc = $($.parseXML(data));
-      });
+      $scope.getRssContent();
     }, function() {
       $scope.mainAlerts.push({
         type: 'error',
