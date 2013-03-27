@@ -48,32 +48,9 @@ app.configure(function() {
 });
 
 function filterArticles(articles, filterStr) {
-  try {
-    var newArticles = [];
-    var seen = {};
-    var filter = filterStr && vm.createScript('(' + filterStr + ')(article);');
-    articles.forEach(function(article) {
-      var newArticle = true;
-      if (filter) {
-        newArticle = filter.runInNewContext({
-          article: article
-        });
-      }
-      if (newArticle) {
-        if (newArticle.title && newArticle.description && newArticles.link) {
-          article = newArticle;
-        }
-        if (!seen[article.link]) {
-          newArticles.push(article);
-          seen[article.line] = true;
-        }
-      }
-    });
-    articles = newArticles;
-  } catch (e) {
-    console.log('filterArticles error:', e);
-  }
-  return articles;
+  return vm.runInNewContext('(' + filterStr + ')(articles);', {
+    articles: articles
+  });
 }
 
 function generateRss(aggregatorName, options, callback) {
@@ -102,7 +79,14 @@ function generateRss(aggregatorName, options, callback) {
       // we assume err is always null.
       var allArticles = [].concat.apply([], articlesArray);
       if (agg.filter) {
-        allArticles = filterArticles(allArticles, agg.filter);
+        try {
+          allArticles = filterArticles(allArticles, agg.filter);
+        } catch (e) {
+          if (options.debug) {
+            callback(e);
+            return;
+          }
+        }
       }
       var feed_url = sitePrefix + '/aggregator/' + encodeAggregatorName(aggregatorName) + '.rss';
       var site_url = sitePrefix + '/static/main.html#/edit?name=' + encodeURIComponent(aggregatorName);
@@ -136,7 +120,7 @@ app.get(new RegExp('^/aggregator/(.+)\\.rss$'), function(req, res) {
   generateRss(aggregatorName, req.query, function(err, result) {
     if (err) {
       console.log('failed in generateRss:', err);
-      res.send(500, 'failed generating rss');
+      res.send(500, 'failed generating rss (' + err + ')');
     } else {
       res.send(result);
     }

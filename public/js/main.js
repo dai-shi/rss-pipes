@@ -35,7 +35,6 @@ var AggregatorListCtrl = ['$scope', 'Aggregator', function($scope, Aggregator) {
     }
     $scope.aggregators = data;
   });
-  //TODO add rssUrl
   $scope.createNewAggregator = function() {
     Aggregator.create($scope.newAgg, function() {
       $scope.newAgg = {
@@ -67,7 +66,7 @@ var AggregatorEditCtrl = ['$scope', '$routeParams', '$http', 'Aggregator', funct
   });
 
   $scope.getRssContent = function() {
-    $http.get($scope.rssUrl).success(function(data) {
+    $http.get($scope.rssUrl + '?debug=1').success(function(data) {
       $scope.rssDoc = jQuery($.parseXML(data));
     });
   };
@@ -88,6 +87,7 @@ var AggregatorEditCtrl = ['$scope', '$routeParams', '$http', 'Aggregator', funct
       });
     });
   };
+
 }];
 
 var mainModule = angular.module('MainModule', ['ui', 'AggregatorServices']);
