@@ -3,7 +3,7 @@
     fieldset
     legend
       - if (lang === 'ja')
-        | 新規登録
+        | 新規作成
       - else
         | Create New Aggregator
     label
@@ -36,13 +36,14 @@
 
     button.btn(ng-click="createNewAggregator()")
       - if (lang === 'ja')
-        | 新規登録
+        | 登録
       - else
-        | Create
+        | Submit
 hr
 .container
   div(ng-repeat="aggregator in aggregators")
     .well
+      input(type="text", ng-init="aggregator.displayUrl=aggregator.rssUrl", ng-model="aggregator.displayUrl", ng-change="aggregator.displayUrl=aggregator.rssUrl")
       h4(ng-bind="aggregator.name")
       p(ng-bind="aggregator.description")
       a(ng-href="#/edit?name={{aggregator.name}}")

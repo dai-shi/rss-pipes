@@ -8,10 +8,15 @@ html(ng-app="MainModule")#ng-app
     style
       body { padding-top: 60px; }
     link(href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css", rel="stylesheet")
+    link(href="codemirror/codemirror.css", rel="stylesheet")
+    link(href="codemirror/solarized.css", rel="stylesheet")
     script(src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js")
     script(src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js")
     script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.min.js")
     script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular-resource.min.js")
+    script(src="codemirror/codemirror.js")
+    script(src="codemirror/javascript.js")
+    script(src="//cdnjs.cloudflare.com/ajax/libs/angular-ui/0.4.0/angular-ui.min.js")
     script(src="js/common.js")
     script(src="js/main.js")
   body(ng-init="lang = '#{lang}'; sitePrefix = '#{sitePrefix}';")

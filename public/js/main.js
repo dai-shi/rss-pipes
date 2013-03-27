@@ -28,7 +28,14 @@
 /* global common: false */
 
 var AggregatorListCtrl = ['$scope', 'Aggregator', function($scope, Aggregator) {
-  $scope.aggregators = Aggregator.list();
+  Aggregator.list(function(data) {
+    var len = data.length;
+    for (var i = 0; i < len; i++) {
+      data[i].rssUrl = $scope.sitePrefix + '/aggregator/' + common.encodeAggregatorName(data[i].name) + '.rss';
+    }
+    $scope.aggregators = data;
+  });
+  //TODO add rssUrl
   $scope.createNewAggregator = function() {
     Aggregator.create($scope.newAgg, function() {
       $scope.newAgg = {
@@ -50,6 +57,7 @@ var AggregatorListCtrl = ['$scope', 'Aggregator', function($scope, Aggregator) {
 
 var AggregatorEditCtrl = ['$scope', '$routeParams', '$http', 'Aggregator', function($scope, $routeParams, $http, Aggregator) {
   $scope.paramName = $routeParams.name;
+  $scope.rssUrl = $scope.sitePrefix + '/aggregator/' + common.encodeAggregatorName($scope.paramName) + '.rss';
   $scope.jQuery = jQuery;
   Aggregator.fetch({
     name: $scope.paramName
@@ -59,8 +67,7 @@ var AggregatorEditCtrl = ['$scope', '$routeParams', '$http', 'Aggregator', funct
   });
 
   $scope.getRssContent = function() {
-    var rssUrl = $scope.sitePrefix + '/aggregator/' + common.encodeAggregatorName($scope.paramName) + '.rss';
-    $http.get(rssUrl).success(function(data) {
+    $http.get($scope.rssUrl).success(function(data) {
       $scope.rssDoc = jQuery($.parseXML(data));
     });
   };
@@ -83,7 +90,7 @@ var AggregatorEditCtrl = ['$scope', '$routeParams', '$http', 'Aggregator', funct
   };
 }];
 
-var mainModule = angular.module('MainModule', ['AggregatorServices']);
+var mainModule = angular.module('MainModule', ['ui', 'AggregatorServices']);
 
 mainModule.config(['$routeProvider', function($routeProvider) {
   $routeProvider.

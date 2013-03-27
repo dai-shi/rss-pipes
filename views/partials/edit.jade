@@ -3,7 +3,7 @@
     fieldset
     legend
       - if (lang === 'ja')
-        | 更新登録
+        | 編集
       - else
         | Update Aggregator
     label
@@ -27,7 +27,12 @@
         | Feed URLs (separated by lines)
     textarea(ng-model="aggregator.feeds")
 
-    //- TODO edit filter (GUI?)
+    label
+      - if (lang === 'ja')
+        | フィルタースクリプト
+      - else
+        | Filter Script
+    textarea(ui-codemirror="{mode: 'javascript', lineNumbers: true, theme: 'solarized light'}", ng-model="anugular.filter")
 
     label.checkbox
       input(type="checkbox", ng-model="aggregator.browsable")
@@ -38,12 +43,13 @@
 
     button.btn(ng-click="updateAggregator()")
       - if (lang === 'ja')
-        | 更新登録
+        | 更新
       - else
         | Update
 hr
 .container
   .rss-doc(ng-show="rssDoc")
+    input(type="text", ng-init="displayUrl=rssUrl", ng-model="displayUrl", ng-change="displayUrl=rssUrl")
     h3.rss-title(ng-bind="rssDoc.find('channel > title').text()")
     ul
       li(ng-repeat="itemEle in rssDoc.find('item').get()")
