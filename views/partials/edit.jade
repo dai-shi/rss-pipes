@@ -11,7 +11,7 @@
         | 名前 ("/"区切り)
       - else
         | Name (separated by "/")
-    input(type="text", placeholder="food/japanese/sushi", ng-model="aggregator.name")
+    input(type="text", placeholder="food/japanese/sushi", ng-model="aggregator.name", readonly="readonly")
     
     label
       - if (lang === 'ja')
