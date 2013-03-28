@@ -1,44 +1,11 @@
 .container
-  form
-    fieldset
-    legend
-      - if (lang === 'ja')
-        | 新規作成
-      - else
-        | Create New Aggregator
-    label
-      - if (lang === 'ja')
-        | 名前 ("/"区切り)
-      - else
-        | Name (separated by "/")
-    input(type="text", placeholder="food/japanese/sushi", ng-model="newAgg.name")
-    
-    label
-      - if (lang === 'ja')
-        | 説明文 (他人にも分かるように)
-      - else
-        | Description
-    textarea(ng-model="newAgg.description")
-
-    label
-      - if (lang === 'ja')
-        | フィードURL (改行区切り)
-      - else
-        | Feed URLs (separated by lines)
-    textarea(ng-model="newAgg.feeds")
-
-    label.checkbox
-      input(type="checkbox", ng-model="newAgg.browsable", ng-init="newAgg.browsable = true")
-      - if (lang === 'ja')
-        | 閲覧可能 (名前を知らなくても)
-      - else
-        | Browsable (without knowing the name)
-
-    button.btn(ng-click="createNewAggregator()")
-      - if (lang === 'ja')
-        | 登録
-      - else
-        | Submit
+  a.btn.btn-warning(ng-href="#/edit")
+    i.icon-edit.icon-white
+    | &nbsp;
+    - if (lang === 'ja')
+      | 新規作成
+    - else
+      | Create New
 hr
 .container
   div(ng-repeat="aggregator in aggregators")
@@ -46,7 +13,9 @@ hr
       input(type="text", ng-init="aggregator.displayUrl=aggregator.rssUrl", ng-model="aggregator.displayUrl", ng-change="aggregator.displayUrl=aggregator.rssUrl")
       h4(ng-bind="aggregator.name")
       p(ng-bind="aggregator.description")
-      a(ng-href="#/edit?name={{aggregator.name}}")
+      a.btn.btn-info(ng-href="#/edit?name={{aggregator.name}}")
+        i.icon-pencil.icon-white
+        | &nbsp;
         - if (lang === 'ja')
           | 編集
         - else
