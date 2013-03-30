@@ -69,12 +69,14 @@ function generateRss(aggregatorName, options, callback) {
       try {
         feedparser.parseUrl(url, function(err, meta, articles) {
           if (err) {
-            throw err;
+            console.log('error by aggregator[1] "' + aggregatorName + '" in parsing "' + url + '":', err);
+            cb(null, []);
+            return;
           }
           cb(null, articles);
         });
       } catch (err) {
-        console.log('error by aggregator "' + aggregatorName + '" in parsing "' + url + '":', err);
+        console.log('error by aggregator[2] "' + aggregatorName + '" in parsing "' + url + '":', err);
         cb(null, []);
       }
     },

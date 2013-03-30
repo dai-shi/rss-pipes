@@ -122,7 +122,7 @@ function updateAggregator(params, callback) {
       return;
     }
 
-    ['name', 'description', 'feeds', 'filter', 'browsable'].forEach(function(key) {
+    ['description', 'feeds', 'filter'].forEach(function(key) {
       if (params.hasOwnProperty(key)) {
         agg[key] = params[key];
       }
