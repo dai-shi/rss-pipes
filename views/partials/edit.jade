@@ -1,45 +1,56 @@
 .container
   form.edit
     fieldset
-    legend(ng-hide="paramName")= (lang === 'ja' ? '新規作成' : 'Create New Aggregator')
-    legend(ng-show="paramName")= (lang === 'ja' ? '編集' : 'Update Aggregator')
-    label= (lang === 'ja' ? '名前 ("/"区切り)' : 'Name (separated by "/")')
-    .name-input
-      input(type="text", placeholder="food/japanese/sushi", ng-model="aggregator.name", ng-readonly="paramName", ng-change="checkAggregatorName()")
-      span.name-availability(ng-hide="paramName")
-        img(src="image/spinner.gif", ng-show="checking_name")
-        span.icon-ok(ng-show="!cheking_name && name_is_available")
-        span(ng-show="!checking_name && name_is_available")= (lang === 'ja' ? '利用可能' : 'Available')
-        span(ng-show="aggregator.name && !checking_name && !name_is_available")= (lang === 'ja' ? '利用不可' : 'Not Available')
-        span(ng-show="cheking_name", ng-bind="checking_name")
-    
-    label= (lang === 'ja' ? '説明文 (他人にも分かるように)' : 'Description')
-    textarea(ng-model="aggregator.description")
+      .row
+        .span8
+          legend(ng-hide="paramName")= (lang === 'ja' ? '新規作成' : 'Create New Aggregator')
+          legend(ng-show="paramName")= (lang === 'ja' ? '編集' : 'Update Aggregator')
+          label= (lang === 'ja' ? '名前 ("/"区切り)' : 'Name (separated by "/")')
+          .name-input
+            input.span6(type="text", placeholder="food/japanese/sushi", ng-model="aggregator.name", ng-readonly="paramName", ng-change="checkAggregatorName()")
+            span.name-availability(ng-hide="paramName")
+              img(src="image/spinner.gif", ng-show="checking_name")
+              span.icon-ok(ng-show="!cheking_name && name_is_available")
+              span(ng-show="!checking_name && name_is_available")= (lang === 'ja' ? '利用可能' : 'Available')
+              span(ng-show="aggregator.name && !checking_name && !name_is_available")= (lang === 'ja' ? '利用不可' : 'Not Available')
+              span(ng-show="cheking_name", ng-bind="checking_name")
+          
+          label= (lang === 'ja' ? '説明文 (他の人も使えるようにアピール)' : 'Description')
+          textarea.span8(ng-model="aggregator.description")
 
-    label= (lang === 'ja' ? 'フィードURL (改行区切り)' : 'Feed URLs (separated by lines)')
-    textarea(ng-model="aggregator.feeds")
+          label= (lang === 'ja' ? 'フィードURL (改行区切り)' : 'Feed URLs (separated by lines)')
+          textarea.span8(ng-model="aggregator.feeds")
 
-    label= (lang === 'ja' ? 'フィルタースクリプト' : 'Filter Script')
-    select(ng-model="gist_id", ng-change="importFilterFromGist()")
-      option(value="") フィルターのインポート
-      option(value="dai-shi/5276006")  タイトル中のキーワードで絞り込むフィルター
-      option(value="dai-shi/5274427")  初めの10件に絞り込むフィルター
-      option(value="dai-shi/5276606")  タイトルからURLを抜き出すフィルター
-      option(value="dai-shi/5276548")  AD,PRエントリーを除去するフィルター
-    img.import-spinner(src="image/spinner.gif", ng-show="gist_id")
-    textarea(ui-codemirror="{mode: 'javascript', lineNumbers: true, theme: 'solarized light'}", ng-model="aggregator.filter")
+          label= (lang === 'ja' ? 'フィルタースクリプト' : 'Filter Script')
+          select(ng-model="gist_id", ng-change="importFilterFromGist()")
+            option(value="") フィルターのインポート
+            option(value="dai-shi/5276006")  タイトル中のキーワードで絞り込むフィルター
+            option(value="dai-shi/5274427")  初めの10件に絞り込むフィルター
+            option(value="dai-shi/5276606")  タイトルからURLを抜き出すフィルター
+            option(value="dai-shi/5276548")  AD,PRエントリーを除去するフィルター
+          img.import-spinner(src="image/spinner.gif", ng-show="gist_id")
+          .codemirror-container
+            textarea(ui-codemirror="{mode: 'javascript', fixedGutter: false, theme: 'solarized light'}", ng-model="aggregator.filter")
 
-    label.checkbox(ng-hide="paramName")
-      input(type="checkbox", ng-model="aggregator.browsable")
-      span= (lang === 'ja' ? 'ホームの一覧に表示する (外した場合、名前を忘れるとアクセスできなくなります)' : 'Browsable (without knowing the name)')
+          label.checkbox(ng-hide="paramName")
+            input(type="checkbox", ng-model="aggregator.browsable")
+            span= (lang === 'ja' ? 'ホームの一覧に表示する (外した場合、名前を忘れるとアクセスできなくなります)' : 'Browsable (without knowing the name)')
 
-    button.btn(ng-click="createNewAggregator()", ng-hide="paramName", ng-disabled="!aggregator.name || !aggregator.description || !aggregator.feeds || name_is_available != true")= (lang === 'ja' ? '登録' : 'Create')
-    button.btn(ng-click="updateAggregator()", ng-show="paramName")= (lang === 'ja' ? '更新' : 'Update')
-hr
-.container
-  .rss-doc(ng-show="rssDoc")
-    input(type="text", ng-init="displayUrl=rssUrl", ng-model="displayUrl", ng-change="displayUrl=rssUrl")
-    h3.rss-title(ng-bind="rssDoc.find('channel > title').text()")
-    ul
-      li(ng-repeat="itemEle in rssDoc.find('item').get()")
-        a(target="_blank", ng-href="{{jQuery(itemEle).find('link').text()}}", ng-bind="jQuery(itemEle).find('title').text()")
+          button.btn(ng-click="createNewAggregator()", ng-hide="paramName", ng-disabled="!aggregator.name || !aggregator.description || !aggregator.feeds || name_is_available != true")= (lang === 'ja' ? '登録' : 'Create')
+          button.btn(ng-click="updateAggregator()", ng-show="paramName")= (lang === 'ja' ? '更新' : 'Update')
+      hr
+  .row
+    .span8
+      .rss-doc(ng-show="rssDoc")
+        input.span8(type="text", ng-init="displayUrl=rssUrl", ng-model="displayUrl", ng-change="displayUrl=rssUrl")
+        h3.rss-title(ng-bind="rssDoc.find('channel > title').text()")
+        ul
+          li(ng-repeat="itemEle in rssDoc.find('item').get()")
+            a(target="_blank", ng-href="{{jQuery(itemEle).find('link').text()}}", ng-bind="jQuery(itemEle).find('title').text()")
+  script
+    setTimeout(function() {
+      var ele = $('.codemirror-container');
+      if ($('body').outerWidth() <= 767) {
+        ele.css('width', '' + ele.outerWidth() + 'px');
+      }
+    });

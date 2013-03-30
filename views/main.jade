@@ -12,6 +12,12 @@ html(ng-app="MainModule")#ng-app
     link(href="codemirror/solarized.css", rel="stylesheet")
     style
       .btn-label { margin-left: 8px; }
+      .separator { padding: 0 0 20px 0; border-bottom: 3px dotted #ccc; }
+      .agg-item { padding: 20px 0 20px 0; border-bottom: 3px dotted #ccc; }
+      form.edit .name-input { margin-bottom: 13px; }
+      form.edit textarea { margin-bottom: 13px; }
+      form.edit label.checkbox { margin-top: 8px; }
+      form.edit button { margin-top: 8px; }
     script(src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js")
     script(src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js")
     script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.min.js")
@@ -36,9 +42,11 @@ html(ng-app="MainModule")#ng-app
           li
             a(href="http://dai-shi.github.com/rss-pipes/")
               span.icon-book
-              span= (lang === 'ja' ? '説明ページに戻る' : 'Back to Top Page')
+              span= (lang === 'ja' ? '説明ページ' : 'Top Page')
     .container
-      .alert(ng-repeat="mainAlert in mainAlerts", class="alert-{{mainAlert.type}}")
-        button.close(ng-init="autoDismissAlert(mainAlert);", ng-click="dismissAlert(mainAlert);") &times;
-        span(ng-bind="mainAlert.message")
-      .ng-view
+      .row
+        .span8.offset2
+          .alert(ng-repeat="mainAlert in mainAlerts", class="alert-{{mainAlert.type}}")
+            button.close(ng-init="autoDismissAlert(mainAlert);", ng-click="dismissAlert(mainAlert);") &times;
+            span(ng-bind="mainAlert.message")
+          .ng-view
