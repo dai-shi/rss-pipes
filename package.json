@@ -10,7 +10,8 @@
     "jugglingdb": "~0.2.0-23",
     "jugglingdb-postgres": "0.0.1-5",
     "feedparser": "~0.13.4",
-    "async": "~0.2.6"
+    "async": "~0.2.6",
+    "request": "~2.16.6"
   },
   "devDependencies": {
     "jugglingdb-sqlite3": "*",

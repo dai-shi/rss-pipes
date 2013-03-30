@@ -133,6 +133,26 @@ var AggregatorEditCtrl = ['$scope', '$routeParams', '$http', 'Aggregator', funct
     });
   };
 
+  $scope.importFilterFromGist = function() {
+    if (!$scope.gist_id) {
+      return;
+    }
+    if ($scope.aggregator.filter) {
+      if (!window.confirm($scope.lang === 'ja' ? '上書きされますがよろしいですか？' : 'Are you sure to overwrite?')) {
+        $scope.gist_id = '';
+        return;
+      }
+    }
+    $http.get('/gist/' + $scope.gist_id + '.raw').success(function(data) {
+      if (data) {
+        $scope.aggregator.filter = data;
+        $scope.gist_id = '';
+      }
+    }).error(function() {
+      $scope.gist_id = '';
+    });
+  };
+
 }];
 
 var mainModule = angular.module('MainModule', ['ui', 'AggregatorServices']);

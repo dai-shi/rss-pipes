@@ -33,6 +33,7 @@ var express = require('express');
 var async = require('async');
 var feedparser = require('feedparser');
 var rss = require('rss');
+var request = require('request');
 var datastore = require('./datastore.js');
 
 var encodeAggregatorName = require('./public/js/common.js').encodeAggregatorName;
@@ -72,7 +73,7 @@ function generateRss(aggregatorName, options, callback) {
           }
           cb(null, articles);
         });
-      } catch(err) {
+      } catch (err) {
         console.log('error by aggregator "' + aggregatorName + '" in parsing "' + url + '":', err);
         cb(null, []);
       }
@@ -199,6 +200,20 @@ app.put(new RegExp('^/rest/aggregators/(.+)$'), function(req, res) {
   });
 });
 
+app.get(new RegExp('^/gist/(.+)\\.raw$'), function(req, res) {
+  var gist_id = req.params[0];
+  request('http://gist.github.com/' + gist_id + '/raw/', function(err, response, body) {
+    if (err) {
+      console.log('failed in getting a gist[1]:', err);
+      res.send(500, 'failed getting a gist');
+    } else if (response.statusCode !== 200) {
+      console.log('failed in getting a gist[2]:', response);
+      res.send(500, 'failed getting a gist');
+    } else {
+      res.send(body);
+    }
+  });
+});
 
 app.get(new RegExp('^/static/(.+)\\.html$'), function(req, res) {
   var view_name = req.params[0];

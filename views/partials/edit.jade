@@ -15,6 +15,10 @@
     textarea(ng-model="aggregator.feeds")
 
     label= (lang === 'ja' ? 'フィルタースクリプト' : 'Filter Script')
+    select(ng-model="gist_id", ng-change="importFilterFromGist()")
+      option(value="") フィルターのインポート
+      option(value="dai-shi/5276006")  タイトル中のキーワードで絞り込むフィルター
+      option(value="dai-shi/5274427")  初めの10件に絞り込むフィルター
     textarea(ui-codemirror="{mode: 'javascript', lineNumbers: true, theme: 'solarized light'}", ng-model="aggregator.filter")
 
     label.checkbox
