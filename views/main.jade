@@ -30,11 +30,13 @@ html(ng-app="MainModule")#ng-app
               strong RSS Pipes
           li
             a(href="#/home")
-              span(class="icon-home")
-              - if (lang === 'ja')
-                | ホーム
-              - else
-                | Home
+              span.icon-home
+              span= (lang === 'ja' ? 'ホーム' : 'Home')
+        ul.nav.pull-right
+          li
+            a(href="http://dai-shi.github.com/rss-pipes/")
+              span.icon-book
+              span= (lang === 'ja' ? '説明ページに戻る' : 'Back to Top Page')
     .container
       .alert(ng-repeat="mainAlert in mainAlerts", class="alert-{{mainAlert.type}}")
         button.close(ng-init="autoDismissAlert(mainAlert);", ng-click="dismissAlert(mainAlert);") &times;

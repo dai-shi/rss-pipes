@@ -6,7 +6,12 @@
     label= (lang === 'ja' ? '名前 ("/"区切り)' : 'Name (separated by "/")')
     .name-input
       input(type="text", placeholder="food/japanese/sushi", ng-model="aggregator.name", ng-readonly="paramName", ng-change="checkAggregatorName()")
-      span(ng-bind="name_is_available || 'false'")
+      span.name-availability(ng-hide="paramName")
+        img(src="image/spinner.gif", ng-show="checking_name")
+        span.icon-ok(ng-show="!cheking_name && name_is_available")
+        span(ng-show="!checking_name && name_is_available")= (lang === 'ja' ? '利用可能' : 'Available')
+        span(ng-show="aggregator.name && !checking_name && !name_is_available")= (lang === 'ja' ? '利用不可' : 'Not Available')
+        span(ng-show="cheking_name", ng-bind="checking_name")
     
     label= (lang === 'ja' ? '説明文 (他人にも分かるように)' : 'Description')
     textarea(ng-model="aggregator.description")
@@ -19,11 +24,14 @@
       option(value="") フィルターのインポート
       option(value="dai-shi/5276006")  タイトル中のキーワードで絞り込むフィルター
       option(value="dai-shi/5274427")  初めの10件に絞り込むフィルター
+      option(value="dai-shi/5276606")  タイトルからURLを抜き出すフィルター
+      option(value="dai-shi/5276548")  AD,PRエントリーを除去するフィルター
+    img.import-spinner(src="image/spinner.gif", ng-show="gist_id")
     textarea(ui-codemirror="{mode: 'javascript', lineNumbers: true, theme: 'solarized light'}", ng-model="aggregator.filter")
 
     label.checkbox(ng-hide="paramName")
       input(type="checkbox", ng-model="aggregator.browsable")
-      span= (lang === 'ja' ? '一覧に表示する(外した場合、名前を忘れるとアクセスできなくなります)' : 'Browsable (without knowing the name)')
+      span= (lang === 'ja' ? 'ホームの一覧に表示する (外した場合、名前を忘れるとアクセスできなくなります)' : 'Browsable (without knowing the name)')
 
     button.btn(ng-click="createNewAggregator()", ng-hide="paramName", ng-disabled="!aggregator.name || !aggregator.description || !aggregator.feeds || name_is_available != true")= (lang === 'ja' ? '登録' : 'Create')
     button.btn(ng-click="updateAggregator()", ng-show="paramName")= (lang === 'ja' ? '更新' : 'Update')
@@ -34,4 +42,4 @@ hr
     h3.rss-title(ng-bind="rssDoc.find('channel > title').text()")
     ul
       li(ng-repeat="itemEle in rssDoc.find('item').get()")
-        a(ng-href="{{jQuery(itemEle).find('link').text()}}", ng-bind="jQuery(itemEle).find('title').text()")
+        a(target="_blank", ng-href="{{jQuery(itemEle).find('link').text()}}", ng-bind="jQuery(itemEle).find('title').text()")

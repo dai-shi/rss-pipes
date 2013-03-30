@@ -66,15 +66,17 @@ var AggregatorEditCtrl = ['$scope', '$routeParams', '$http', 'Aggregator', funct
     };
   }
 
+  $scope.checking_name = false;
   $scope.checkAggregatorName = function(force) {
     if (!$scope.aggregator.name || !common.aggregatorNameRegExp.test($scope.aggregator.name)) {
       $scope.name_is_available = false;
+      $scope.checking_name = false;
       return;
     }
 
     if (force || typeof $scope.name_is_available !== 'string') {
       if (!force) {
-        $scope.name_is_available = ($scope.lang === 'ja' ? '確認中...' : 'Checking...');
+        $scope.checking_name = ($scope.lang === 'ja' ? '確認中...' : 'Checking...');
       }
       var savedName = $scope.aggregator.name;
       Aggregator.check({
@@ -82,6 +84,7 @@ var AggregatorEditCtrl = ['$scope', '$routeParams', '$http', 'Aggregator', funct
       }, function() {
         if (savedName === $scope.aggregator.name) {
           $scope.name_is_available = false;
+          $scope.checking_name = false;
         } else {
           setTimeout(function() {
             $scope.checkAggregatorName(true);
@@ -90,6 +93,7 @@ var AggregatorEditCtrl = ['$scope', '$routeParams', '$http', 'Aggregator', funct
       }, function() {
         if (savedName === $scope.aggregator.name) {
           $scope.name_is_available = true;
+          $scope.checking_name = false;
         } else {
           setTimeout(function() {
             $scope.checkAggregatorName(true);
