@@ -35,42 +35,86 @@ var AggregatorListCtrl = ['$scope', 'Aggregator', function($scope, Aggregator) {
     }
     $scope.aggregators = data;
   });
-  $scope.createNewAggregator = function() {
-    Aggregator.create($scope.newAgg, function() {
-      $scope.newAgg = {
-        browsable: true
-      };
-      $scope.mainAlerts.push({
-        type: 'success',
-        message: ($scope.lang === 'ja' ? '追加完了しました' : 'Done creating.')
-      });
-      $scope.aggregators = Aggregator.list();
-    }, function() {
-      $scope.mainAlerts.push({
-        type: 'error',
-        message: ($scope.lang === 'ja' ? '追加できませんでした' : 'Failed creating.')
-      });
-    });
-  };
 }];
 
 var AggregatorEditCtrl = ['$scope', '$routeParams', '$http', 'Aggregator', function($scope, $routeParams, $http, Aggregator) {
-  $scope.paramName = $routeParams.name;
-  $scope.rssUrl = $scope.sitePrefix + '/aggregator/' + common.encodeAggregatorName($scope.paramName) + '.rss';
   $scope.jQuery = jQuery;
-  Aggregator.fetch({
-    name: $scope.paramName
-  }, function(data) {
-    data.browsable = !! data.browsable;
-    $scope.aggregator = data;
-  });
 
   $scope.getRssContent = function() {
     $http.get($scope.rssUrl + '?debug=1').success(function(data) {
       $scope.rssDoc = jQuery($.parseXML(data));
     });
   };
-  $scope.getRssContent();
+
+  $scope.getAggregator = function(name) {
+    Aggregator.fetch({
+      name: name
+    }, function(data) {
+      data.browsable = !! data.browsable;
+      $scope.aggregator = data;
+      $scope.rssUrl = $scope.sitePrefix + '/aggregator/' + common.encodeAggregatorName(name) + '.rss';
+      $scope.getRssContent();
+    });
+  };
+
+  if ($routeParams.name) {
+    $scope.paramName = $routeParams.name;
+    $scope.getAggregator($routeParams.name);
+  } else {
+    $scope.aggregator = {
+      browsable: true
+    };
+  }
+
+  $scope.checkAggregatorName = function(force) {
+    if (!$scope.aggregator.name || !common.aggregatorNameRegExp.test($scope.aggregator.name)) {
+      $scope.name_is_available = false;
+      return;
+    }
+
+    if (force || typeof $scope.name_is_available !== 'string') {
+      if (!force) {
+        $scope.name_is_available = ($scope.lang === 'ja' ? '確認中...' : 'Checking...');
+      }
+      var savedName = $scope.aggregator.name;
+      Aggregator.check({
+        name: savedName
+      }, function() {
+        if (savedName === $scope.aggregator.name) {
+          $scope.name_is_available = false;
+        } else {
+          setTimeout(function() {
+            $scope.checkAggregatorName(true);
+          }, 10);
+        }
+      }, function() {
+        if (savedName === $scope.aggregator.name) {
+          $scope.name_is_available = true;
+        } else {
+          setTimeout(function() {
+            $scope.checkAggregatorName(true);
+          }, 10);
+        }
+      });
+    }
+  };
+
+  $scope.createNewAggregator = function() {
+    Aggregator.create($scope.aggregator, function() {
+      $scope.mainAlerts.push({
+        type: 'success',
+        message: ($scope.lang === 'ja' ? '登録完了しました' : 'Done creating.')
+      });
+      $scope.paramName = $scope.aggregator.name;
+      $scope.rssUrl = $scope.sitePrefix + '/aggregator/' + common.encodeAggregatorName($scope.aggregator.name) + '.rss';
+      $scope.getRssContent();
+    }, function() {
+      $scope.mainAlerts.push({
+        type: 'error',
+        message: ($scope.lang === 'ja' ? '登録できませんでした' : 'Failed creating.')
+      });
+    });
+  };
 
   $scope.updateAggregator = function() {
     $scope.rssDoc = null;
@@ -79,6 +123,7 @@ var AggregatorEditCtrl = ['$scope', '$routeParams', '$http', 'Aggregator', funct
         type: 'success',
         message: ($scope.lang === 'ja' ? '更新しました' : 'Done updating.')
       });
+      $scope.rssUrl = $scope.sitePrefix + '/aggregator/' + common.encodeAggregatorName($scope.aggregator.name) + '.rss';
       $scope.getRssContent();
     }, function() {
       $scope.mainAlerts.push({
@@ -141,8 +186,11 @@ aggregatorServices.factory('Aggregator', ['$resource', function($resource) {
     create: {
       method: 'POST',
       params: {
-        name: null
+        name: ''
       }
+    },
+    check: {
+      method: 'HEAD'
     },
     fetch: {
       method: 'GET'

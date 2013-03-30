@@ -60,16 +60,19 @@ var Aggregator = schema.define('Aggregator', {
   }
 });
 
-//schema.automigrate();
 schema.autoupdate();
-
-Aggregator.create();
 
 function getAggregator(name, callback) {
   Aggregator.findOne({
     where: {
       name: name
     }
+  }, callback);
+}
+
+function existsAggregator(name, callback) {
+  Aggregator.count({
+    name: name
   }, callback);
 }
 
@@ -82,18 +85,17 @@ function createNewAggregator(params, callback) {
     callback('invalid name format');
     return;
   }
-  getAggregator(params.name, function(err, agg) {
+  existsAggregator(params.name, function(err, exists) {
     if (err) {
       callback(err);
       return;
     }
-    if (agg) {
+    if (exists) {
       callback('already exists');
       return;
     }
 
-    var agg = new Aggregator(params);
-    agg.save(callback);
+    Aggregator.create(params, callback);
   });
 }
 
@@ -134,6 +136,7 @@ function updateAggregator(params, callback) {
 //TODO import&export (admin)
 
 exports.getAggregator = getAggregator;
+exports.existsAggregator = existsAggregator;
 exports.createNewAggregator = createNewAggregator;
 exports.listAggregators = listAggregators;
 exports.updateAggregator = updateAggregator;

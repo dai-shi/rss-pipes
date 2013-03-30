@@ -1,11 +1,7 @@
 .container
   a.btn.btn-warning(ng-href="#/edit")
     i.icon-edit.icon-white
-    | &nbsp;
-    - if (lang === 'ja')
-      | 新規作成
-    - else
-      | Create New
+    span.btn-label= (lang === 'ja' ? '新規作成' : 'Create New')
 hr
 .container
   div(ng-repeat="aggregator in aggregators")
@@ -15,8 +11,4 @@ hr
       p(ng-bind="aggregator.description")
       a.btn.btn-info(ng-href="#/edit?name={{aggregator.name}}")
         i.icon-pencil.icon-white
-        | &nbsp;
-        - if (lang === 'ja')
-          | 編集
-        - else
-          | Edit
+        span.btn-label= (lang === 'ja' ? '編集' : 'Edit')

@@ -12,7 +12,14 @@ describe('basic test for datastore', function() {
     var callback = function() {
       process.env.SQLITE_DB_FILE = tmp_test_db;
       datastore = require('../datastore.js');
-      done();
+      datastore.createNewAggregator({
+        name: 'dummy',
+        description: 'dummy',
+        feeds: 'dummy'
+      }, function() {
+        //ignore error
+        done();
+      });
     };
     fs.exists(tmp_test_db, function(exists) {
       if (exists) {
@@ -30,6 +37,14 @@ describe('basic test for datastore', function() {
     });
   });
 
+  it('should not exists an agg', function(done) {
+    datastore.existsAggregator('hoge', function(err, exists) {
+      assert.ifError(err);
+      assert.ok(!exists);
+      done();
+    });
+  });
+
   it('should create a new agg', function(done) {
     datastore.createNewAggregator({
       name: 'hoge',
@@ -38,6 +53,14 @@ describe('basic test for datastore', function() {
       browsable: true
     }, function(err) {
       assert.ifError(err);
+      done();
+    });
+  });
+
+  it('should exists an agg', function(done) {
+    datastore.existsAggregator('hoge', function(err, exists) {
+      assert.ifError(err);
+      assert.ok(exists);
       done();
     });
   });

@@ -1,51 +1,28 @@
 .container
-  form
+  form.edit
     fieldset
-    legend
-      - if (lang === 'ja')
-        | 編集
-      - else
-        | Update Aggregator
-    label
-      - if (lang === 'ja')
-        | 名前 ("/"区切り)
-      - else
-        | Name (separated by "/")
-    input(type="text", placeholder="food/japanese/sushi", ng-model="aggregator.name", readonly="readonly")
+    legend(ng-hide="paramName")= (lang === 'ja' ? '新規作成' : 'Create New Aggregator')
+    legend(ng-show="paramName")= (lang === 'ja' ? '編集' : 'Update Aggregator')
+    label= (lang === 'ja' ? '名前 ("/"区切り)' : 'Name (separated by "/")')
+    .name-input
+      input(type="text", placeholder="food/japanese/sushi", ng-model="aggregator.name", ng-readonly="paramName", ng-change="checkAggregatorName()")
+      span(ng-bind="name_is_available || 'false'")
     
-    label
-      - if (lang === 'ja')
-        | 説明文 (他人にも分かるように)
-      - else
-        | Description
+    label= (lang === 'ja' ? '説明文 (他人にも分かるように)' : 'Description')
     textarea(ng-model="aggregator.description")
 
-    label
-      - if (lang === 'ja')
-        | フィードURL (改行区切り)
-      - else
-        | Feed URLs (separated by lines)
+    label= (lang === 'ja' ? 'フィードURL (改行区切り)' : 'Feed URLs (separated by lines)')
     textarea(ng-model="aggregator.feeds")
 
-    label
-      - if (lang === 'ja')
-        | フィルタースクリプト
-      - else
-        | Filter Script
+    label= (lang === 'ja' ? 'フィルタースクリプト' : 'Filter Script')
     textarea(ui-codemirror="{mode: 'javascript', lineNumbers: true, theme: 'solarized light'}", ng-model="aggregator.filter")
 
     label.checkbox
       input(type="checkbox", ng-model="aggregator.browsable")
-      - if (lang === 'ja')
-        | 閲覧可能 (名前を知らなくても)
-      - else
-        | Browsable (without knowing the name)
+      span= (lang === 'ja' ? '一覧に表示' : 'Browsable (without knowing the name)')
 
-    button.btn(ng-click="updateAggregator()")
-      - if (lang === 'ja')
-        | 更新
-      - else
-        | Update
+    button.btn(ng-click="createNewAggregator()", ng-hide="paramName", ng-disabled="!aggregator.name || !aggregator.description || !aggregator.feeds || name_is_available != true")= (lang === 'ja' ? '登録' : 'Create')
+    button.btn(ng-click="updateAggregator()", ng-show="paramName")= (lang === 'ja' ? '更新' : 'Update')
 hr
 .container
   .rss-doc(ng-show="rssDoc")

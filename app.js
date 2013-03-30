@@ -65,14 +65,17 @@ function generateRss(aggregatorName, options, callback) {
         cb([]);
         return;
       }
-      feedparser.parseUrl(url, function(err, meta, articles) {
-        if (err) {
-          console.log('error by aggregator "' + aggregatorName + '" in parsing "' + url + '":', err);
-          cb(null, []);
-          return;
-        }
-        cb(null, articles);
-      });
+      try {
+        feedparser.parseUrl(url, function(err, meta, articles) {
+          if (err) {
+            throw err;
+          }
+          cb(null, articles);
+        });
+      } catch(err) {
+        console.log('error by aggregator "' + aggregatorName + '" in parsing "' + url + '":', err);
+        cb(null, []);
+      }
     },
 
     function(err, articlesArray) {
@@ -157,6 +160,20 @@ app.get(new RegExp('^/rest/aggregators/(.+)$'), function(req, res) {
       res.send(500, 'failed getting an aggregator');
     } else {
       res.json(result);
+    }
+  });
+});
+
+app.head(new RegExp('^/rest/aggregators/(.+)$'), function(req, res) {
+  var aggregatorName = req.params[0];
+  datastore.existsAggregator(aggregatorName, function(err, exists) {
+    if (err) {
+      console.log('failed in getAggregator:', err);
+      res.send(500, 'failed getting an aggregator');
+    } else if (!exists) {
+      res.send(404);
+    } else {
+      res.send(200);
     }
   });
 });
