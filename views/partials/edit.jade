@@ -42,7 +42,7 @@
   .row
     .span8
       .rss-doc(ng-show="rssDoc")
-        input.span8(type="text", ng-init="displayUrl=rssUrl", ng-model="displayUrl", ng-change="displayUrl=rssUrl")
+        input.span8(type="text", ng-model="displayUrl", ng-change="displayUrl=rssUrl")
         h3.rss-title(ng-bind="rssDoc.find('channel > title').text()")
         ul
           li(ng-repeat="itemEle in rssDoc.find('item').get()")

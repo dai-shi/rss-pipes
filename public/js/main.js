@@ -41,8 +41,11 @@ var AggregatorEditCtrl = ['$scope', '$routeParams', '$http', 'Aggregator', funct
   $scope.jQuery = jQuery;
 
   $scope.getRssContent = function() {
-    $http.get($scope.rssUrl + '?debug=1').success(function(data) {
+    var url = $scope.rssUrl;
+    url = url.replace(new RegExp('^http:\\/\\/[^\\/]+'), ''); //workaround
+    $http.get(url + '?debug=1').success(function(data) {
       $scope.rssDoc = jQuery($.parseXML(data));
+      $scope.displayUrl = $scope.rssUrl;
     });
   };
 
