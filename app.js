@@ -118,7 +118,7 @@ function generateRss(aggregatorName, options, callback) {
 }
 
 app.get('/', function(req, res) {
-  res.send('It works!');
+  res.redirect('http://dai-shi.github.com/rss-pipes/');
 });
 
 app.get(new RegExp('^/aggregator/(.+)\\.rss$'), function(req, res) {

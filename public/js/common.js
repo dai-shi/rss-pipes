@@ -30,4 +30,4 @@ common.encodeAggregatorName = function(name) {
   return name.split('/').map(encodeURIComponent).join('/');
 };
 
-common.aggregatorNameRegExp = new RegExp('^(([^\\s\\/]{1,2}|[^\\s\\/][^\\t\\r\\n\\/]+[^\\s\\/])\\/)*([^\\s\\/]{1,2}|[^\\s\\/][^\\t\\r\\n\\/]+[^\\s\\/])$');
+common.aggregatorNameRegExp = new RegExp('^(([^\\s/]{1,2}|[^\\s/][^\\t\\r\\n/]+[^\\s/])/)*([^\\s/]{1,2}|[^\\s/][^\\t\\r\\n/]+[^\\s/])$');

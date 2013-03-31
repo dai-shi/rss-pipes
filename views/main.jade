@@ -18,6 +18,7 @@ html(ng-app="MainModule")#ng-app
       form.edit textarea { margin-bottom: 13px; }
       form.edit label.checkbox { margin-top: 8px; }
       form.edit button { margin-top: 8px; }
+      .link-label { margin-right: 6px; }
     script(src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js")
     script(src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js")
     script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.min.js")
@@ -40,7 +41,7 @@ html(ng-app="MainModule")#ng-app
               span= (lang === 'ja' ? 'ホーム' : 'Home')
         ul.nav.pull-right
           li
-            a(href="http://dai-shi.github.com/rss-pipes/")
+            a(href="/")
               span.icon-book
               span= (lang === 'ja' ? '説明ページ' : 'Top Page')
     .container

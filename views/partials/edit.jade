@@ -27,7 +27,7 @@
             option(value="dai-shi/5276006")  タイトル中のキーワードで絞り込むフィルター
             option(value="dai-shi/5274427")  初めの10件に絞り込むフィルター
             option(value="dai-shi/5276606")  タイトルからURLを抜き出すフィルター
-            option(value="dai-shi/5276548")  AD,PRエントリーを除去するフィルター
+            option(value="dai-shi/5276584")  AD,PRエントリーを除去するフィルター
           img.import-spinner(src="image/spinner.gif", ng-show="gist_id")
           .codemirror-container
             textarea(ui-codemirror="{mode: 'javascript', fixedGutter: false, theme: 'solarized light'}", ng-model="aggregator.filter")
@@ -42,7 +42,8 @@
   .row
     .span8
       .rss-doc(ng-show="rssDoc")
-        input.span8(type="text", ng-model="displayUrl", ng-change="displayUrl=rssUrl")
+        span.link-label= (lang === 'ja' ? 'RSSのURL' : 'RSS Link')
+        input.span7(type="text", ng-model="displayUrl", ng-change="displayUrl=rssUrl")
         h3.rss-title(ng-bind="rssDoc.find('channel > title').text()")
         ul
           li(ng-repeat="itemEle in rssDoc.find('item').get()")

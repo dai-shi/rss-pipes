@@ -9,7 +9,8 @@
   .row
     .span8
       .agg-item(ng-repeat="aggregator in aggregators")
-        input.span8(type="text", ng-init="aggregator.displayUrl=aggregator.rssUrl", ng-model="aggregator.displayUrl", ng-change="aggregator.displayUrl=aggregator.rssUrl")
+        span.link-label= (lang === 'ja' ? 'RSSのURL' : 'RSS Link')
+        input.span7(type="text", ng-init="aggregator.displayUrl=aggregator.rssUrl", ng-model="aggregator.displayUrl", ng-change="aggregator.displayUrl=aggregator.rssUrl")
         h4(ng-bind="aggregator.name")
         p(ng-bind="aggregator.description")
         a.btn.btn-info(ng-href="#/edit?name={{aggregator.name}}")
