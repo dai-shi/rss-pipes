@@ -47,6 +47,7 @@ app.configure(function() {
   app.use(express.json());
   app.set('views', path.join(__dirname, 'views'));
   app.set('view engine', 'jade');
+  app.use(express.errorHandler());
 });
 
 function filterArticles(articles, filterStr) {
