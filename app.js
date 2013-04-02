@@ -47,7 +47,10 @@ app.configure(function() {
   app.use(express.json());
   app.set('views', path.join(__dirname, 'views'));
   app.set('view engine', 'jade');
-  app.use(express.errorHandler());
+  app.use(function(err, req, res, next) {
+    console.log(err);
+    res.send(500, 'Fatal Error occured.');
+  });
 });
 
 function filterArticles(articles, filterStr) {
