@@ -62,18 +62,28 @@ var Aggregator = schema.define('Aggregator', {
 
 schema.autoupdate();
 
+function safeCallback(cb) {
+  return function() {
+    try {
+      cb.apply(cb, arguments);
+    } catch (e) {
+      cb(e);
+    }
+  };
+}
+
 function getAggregator(name, callback) {
   Aggregator.findOne({
     where: {
       name: name
     }
-  }, callback);
+  }, safeCallback(callback));
 }
 
 function existsAggregator(name, callback) {
   Aggregator.count({
     name: name
-  }, callback);
+  }, safeCallback(callback));
 }
 
 function createNewAggregator(params, callback) {
@@ -95,7 +105,7 @@ function createNewAggregator(params, callback) {
       return;
     }
 
-    Aggregator.create(params, callback);
+    Aggregator.create(params, safeCallback(callback));
   });
 }
 
@@ -127,7 +137,7 @@ function updateAggregator(params, callback) {
         agg[key] = params[key];
       }
     });
-    agg.save(callback);
+    agg.save(safeCallback(callback));
   });
 }
 
