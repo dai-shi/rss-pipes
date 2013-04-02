@@ -31,7 +31,8 @@ var AggregatorListCtrl = ['$scope', 'Aggregator', function($scope, Aggregator) {
   Aggregator.list(function(data) {
     var len = data.length;
     for (var i = 0; i < len; i++) {
-      data[i].rssUrl = $scope.sitePrefix + '/aggregator/' + common.encodeAggregatorName(data[i].name) + '.rss';
+      data[i].encodedName = common.encodeAggregatorName(data[i].name);
+      data[i].rssUrl = $scope.sitePrefix + '/aggregator/' + data[i].encodedName + '.rss';
     }
     $scope.aggregators = data;
   });

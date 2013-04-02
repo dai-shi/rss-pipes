@@ -13,6 +13,6 @@
         input.span7(type="text", ng-init="aggregator.displayUrl=aggregator.rssUrl", ng-model="aggregator.displayUrl", ng-change="aggregator.displayUrl=aggregator.rssUrl")
         h4(ng-bind="aggregator.name")
         p(ng-bind="aggregator.description")
-        a.btn.btn-info(ng-href="#/edit?name={{aggregator.name}}")
+        a.btn.btn-info(ng-href="#/edit?name={{aggregator.encodedName}}")
           i.icon-pencil.icon-white
           span.btn-label= (lang === 'ja' ? '編集' : 'Edit')
