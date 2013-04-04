@@ -27,7 +27,7 @@
 /* global angular: false */
 /* global common: false */
 
-var AggregatorListCtrl = ['$scope', 'Aggregator', function($scope, Aggregator) {
+var AggregatorListCtrl = ['$scope', '$location', 'Aggregator', function($scope, $location, Aggregator) {
   Aggregator.list(function(data) {
     var len = data.length;
     for (var i = 0; i < len; i++) {
@@ -36,6 +36,12 @@ var AggregatorListCtrl = ['$scope', 'Aggregator', function($scope, Aggregator) {
     }
     $scope.aggregators = data;
   });
+
+  $scope.duplicate = function(aggregator) {
+    $scope.saved.aggregator = aggregator;
+    $location.url('/edit');
+  };
+
 }];
 
 var AggregatorEditCtrl = ['$scope', '$routeParams', '$http', 'Aggregator', function($scope, $routeParams, $http, Aggregator) {
@@ -64,6 +70,9 @@ var AggregatorEditCtrl = ['$scope', '$routeParams', '$http', 'Aggregator', funct
   if ($routeParams.name) {
     $scope.paramName = $routeParams.name;
     $scope.getAggregator($routeParams.name);
+  } else if ($scope.saved.aggregator) {
+    $scope.aggregator = $scope.saved.aggregator;
+    delete $scope.saved.aggregator;
   } else {
     $scope.aggregator = {
       browsable: true
@@ -199,6 +208,7 @@ mainModule.run(['$rootScope', function($rootScope) {
     }, 1500);
   };
   $rootScope.encodeAggregatorName = common.encodeAggregatorName;
+  $rootScope.saved = {};
 }]);
 
 var aggregatorServices = angular.module('AggregatorServices', ['ngResource']);

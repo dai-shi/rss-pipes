@@ -16,3 +16,6 @@
         a.btn.btn-info(ng-href="#/edit?name={{aggregator.encodedName}}")
           i.icon-pencil.icon-white
           span.btn-label= (lang === 'ja' ? '編集' : 'Edit')
+        a.btn.btn-info(ng-click="duplicate(aggregator)")
+          i.icon-share.icon-white
+          span.btn-label= (lang === 'ja' ? '複製' : 'Clone')
