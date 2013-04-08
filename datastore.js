@@ -77,7 +77,7 @@ function getAggregator(name, callback) {
       try {
         result.id = null;
         result.browsable = (result.browsable ? true : false);
-        result.lockcode = (result.lockcode ? true : false);
+        result.lockcode = (result.lockcode ? true : null);
         callback(null, result);
       } catch (e) {
         callback(e);
@@ -128,7 +128,7 @@ function createNewAggregator(params, callback) {
         try {
           result.id = null;
           result.browsable = (result.browsable ? true : false);
-          result.lockcode = (result.lockcode ? true : false);
+          result.lockcode = (result.lockcode ? true : null);
           callback(null, result);
         } catch (e) {
           callback(e);
@@ -151,8 +151,7 @@ function listAggregators(callback) {
         result.forEach(function(x) {
           x.id = null;
           x.browsable = (x.browsable ? true : false);
-          x.lockcode = (x.lockcode ? true : false);
-          console.log(x);
+          x.lockcode = (x.lockcode ? true : null);
         });
         callback(null, result);
       } catch (e) {
@@ -197,7 +196,7 @@ function updateAggregator(params, callback) {
         try {
           result.id = null;
           result.browsable = (result.browsable ? true : false);
-          result.lockcode = (result.lockcode ? true : false);
+          result.lockcode = (result.lockcode ? true : null);
           callback(null, result);
         } catch (e) {
           callback(e);
