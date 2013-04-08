@@ -180,7 +180,9 @@ function updateAggregator(params, callback) {
       return;
     }
     if (agg.lockcode && agg.lockcode !== params.lockcode) {
-      callback('lockcode mismatch');
+      setTimeout(function() {
+        callback('lockcode mismatch');
+      }, 3000);
       return;
     }
 
