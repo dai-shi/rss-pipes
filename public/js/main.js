@@ -60,7 +60,8 @@ var AggregatorEditCtrl = ['$scope', '$routeParams', '$http', 'Aggregator', funct
     Aggregator.fetch({
       name: name
     }, function(data) {
-      data.browsable = !! data.browsable;
+      $scope.lockrequired = data.lockcode;
+      data.lockcode = null;
       $scope.aggregator = data;
       $scope.rssUrl = $scope.sitePrefix + '/aggregator/' + common.encodeAggregatorName(name) + '.rss';
       $scope.getRssContent();
@@ -136,6 +137,7 @@ var AggregatorEditCtrl = ['$scope', '$routeParams', '$http', 'Aggregator', funct
   $scope.updateAggregator = function() {
     $scope.rssDoc = null;
     Aggregator.update($scope.aggregator, function() {
+      $scope.lockrequired = $scope.lockrequired || $scope.lockchecked;
       $scope.mainAlerts.push({
         type: 'success',
         message: ($scope.lang === 'ja' ? '更新しました' : 'Done updating.')
@@ -205,7 +207,7 @@ mainModule.run(['$rootScope', function($rootScope) {
       $rootScope.$apply(function() {
         $rootScope.dismissAlert(mainAlert);
       });
-    }, 1500);
+    }, 3000);
   };
   $rootScope.encodeAggregatorName = common.encodeAggregatorName;
   $rootScope.saved = {};

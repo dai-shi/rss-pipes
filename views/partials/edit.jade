@@ -36,8 +36,19 @@
             input(type="checkbox", ng-model="aggregator.browsable")
             span= (lang === 'ja' ? 'ホームの一覧に表示する (外した場合、名前を忘れるとアクセスできなくなります)' : 'Browsable (without knowing the name)')
 
+      .row
+        .span8
+          .lockcode-area(ng-show="paramName")
+            label.checkbox.pull-left(ng-hide="lockrequired")
+              input(type="checkbox", ng-model="lockchecked")
+              span= (lang === 'ja' ? '更新を制限するためのロックコードを入力' : 'Input lock code to restrict updating')
+            span(ng-show="lockrequired")= (lang === 'ja' ? '更新するためのロックコードを入力 (ロックされています)' : 'Input lock code to update (This is locked)')
+            input.lockcode.span3(type="text", ng-model="aggregator.lockcode", ng-show="lockchecked || lockrequired")
+
+      .row
+        .span8
           button.btn(ng-click="createNewAggregator()", ng-hide="paramName", ng-disabled="!aggregator.name || !aggregator.description || !aggregator.feeds || name_is_available != true")= (lang === 'ja' ? '登録' : 'Create')
-          button.btn(ng-click="updateAggregator()", ng-show="paramName")= (lang === 'ja' ? '更新' : 'Update')
+          button.btn(ng-click="updateAggregator()", ng-show="paramName", ng-disabled="(lockchecked || lockrequired) && !aggregator.lockcode")= (lang === 'ja' ? '更新' : 'Update')
       hr
   .row
     .span8
