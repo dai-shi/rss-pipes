@@ -20,7 +20,6 @@ Japanese page is [here](https://dai-shi.github.com/rss-pipes/)
 TODOs
 -----
 
-* Freeze filters (to avoid spammers to destroy)
 * Garbage collection of filters (that are not used for a week)
 * Search filters
 * Cache control
