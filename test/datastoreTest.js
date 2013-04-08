@@ -132,7 +132,7 @@ describe('basic test for datastore', function() {
     });
   });
 
-  it('should faile to update non-existent agg', function(done) {
+  it('should fail to update non-existent agg', function(done) {
     datastore.updateAggregator({
       name: 'non-hoge',
       description: 'newdesc'
@@ -141,5 +141,45 @@ describe('basic test for datastore', function() {
       done();
     });
   });
+
+  it('should lock an agg', function(done) {
+    datastore.updateAggregator({
+      name: 'hoge',
+      lockcode: 'code999'
+    }, function(err) {
+      assert.ifError(err);
+      datastore.getAggregator('hoge', function(err, result) {
+        assert.ifError(err);
+        assert.equal(result.lockcode, true);
+        done();
+      });
+    });
+  });
+
+  it('should update the locked agg', function(done) {
+    datastore.updateAggregator({
+      name: 'hoge',
+      lockcode: 'code999',
+      description: 'newdesc2'
+    }, function(err) {
+      assert.ifError(err);
+      datastore.getAggregator('hoge', function(err, result) {
+        assert.ifError(err);
+        assert.equal(result.description, 'newdesc2');
+        done();
+      });
+    });
+  });
+
+  it('should fail to update the locked agg w/o lockcode', function(done) {
+    datastore.updateAggregator({
+      name: 'hoge',
+      description: 'newdesc3'
+    }, function(err) {
+      assert.ok(err);
+      done();
+    });
+  });
+
 
 });

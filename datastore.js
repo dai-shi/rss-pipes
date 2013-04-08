@@ -57,33 +57,52 @@ var Aggregator = schema.define('Aggregator', {
   },
   browsable: {
     type: Boolean
+  },
+  lockcode: {
+    type: String
   }
 });
 
 schema.autoupdate();
-
-function safeCallback(cb) {
-  return function() {
-    try {
-      cb.apply(cb, arguments);
-    } catch (e) {
-      cb(e);
-    }
-  };
-}
 
 function getAggregator(name, callback) {
   Aggregator.findOne({
     where: {
       name: name
     }
-  }, safeCallback(callback));
+  }, function(err, result) {
+    if (err) {
+      callback(err);
+    } else {
+      try {
+        if (result.lockcode) {
+          result.lockcode = true;
+        }
+        result.id = null;
+        result.browsable = (result.browsable ? true : false);
+        result.lockcode = (result.lockcode ? true : false);
+        callback(null, result);
+      } catch (e) {
+        callback(e);
+      }
+    }
+  });
 }
 
 function existsAggregator(name, callback) {
   Aggregator.count({
     name: name
-  }, safeCallback(callback));
+  }, function(err, result) {
+    if (err) {
+      callback(err);
+    } else {
+      try {
+        callback(null, (result ? true : false));
+      } catch (e) {
+        callback(e);
+      }
+    }
+  });
 }
 
 function createNewAggregator(params, callback) {
@@ -105,7 +124,20 @@ function createNewAggregator(params, callback) {
       return;
     }
 
-    Aggregator.create(params, safeCallback(callback));
+    Aggregator.create(params, function(err, result) {
+      if (err) {
+        callback(err);
+      } else {
+        try {
+          result.id = null;
+          result.browsable = (result.browsable ? true : false);
+          result.lockcode = (result.lockcode ? true : false);
+          callback(null, result);
+        } catch (e) {
+          callback(e);
+        }
+      }
+    });
   });
 }
 
@@ -114,7 +146,22 @@ function listAggregators(callback) {
     where: {
       browsable: true
     }
-  }, callback);
+  }, function(err, result) {
+    if (err) {
+      callback(err);
+    } else {
+      try {
+        result.forEach(function(x) {
+          x.id = null;
+          x.browsable = (x.browsable ? true : false);
+          x.lockcode = (x.lockcode ? true : false);
+        });
+        callback(null, result);
+      } catch (e) {
+        callback(e);
+      }
+    }
+  });
 }
 
 function updateAggregator(params, callback) {
@@ -122,7 +169,11 @@ function updateAggregator(params, callback) {
     callback('name is required.');
     return;
   }
-  getAggregator(params.name, function(err, agg) {
+  Aggregator.findOne({
+    where: {
+      name: params.name
+    }
+  }, function(err, agg) {
     if (err) {
       callback(err);
       return;
@@ -131,19 +182,33 @@ function updateAggregator(params, callback) {
       callback('no such aggregator');
       return;
     }
+    if (agg.lockcode && agg.lockcode !== params.lockcode) {
+      callback('lockcode mismatch');
+      return;
+    }
 
-    ['description', 'feeds', 'filter'].forEach(function(key) {
+    ['description', 'feeds', 'filter', 'lockcode'].forEach(function(key) {
       if (params.hasOwnProperty(key)) {
         agg[key] = params[key];
       }
     });
-    agg.save(safeCallback(callback));
+    agg.save(function(err, result) {
+      if (err) {
+        callback(err);
+      } else {
+        try {
+          result.id = null;
+          result.browsable = (result.browsable ? true : false);
+          result.lockcode = (result.lockcode ? true : false);
+          callback(null, result);
+        } catch (e) {
+          callback(e);
+        }
+      }
+    });
   });
 }
 
-
-//TODO expire aggregator (based on last access)
-//TODO import&export (admin)
 
 exports.getAggregator = getAggregator;
 exports.existsAggregator = existsAggregator;
