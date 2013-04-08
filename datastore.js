@@ -75,9 +75,6 @@ function getAggregator(name, callback) {
       callback(err);
     } else {
       try {
-        if (result.lockcode) {
-          result.lockcode = true;
-        }
         result.id = null;
         result.browsable = (result.browsable ? true : false);
         result.lockcode = (result.lockcode ? true : false);
