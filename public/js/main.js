@@ -60,7 +60,7 @@ var AggregatorEditCtrl = ['$scope', '$routeParams', '$http', 'Aggregator', funct
     Aggregator.fetch({
       name: name
     }, function(data) {
-      $scope.lockrequired = data.lockcode;
+      $scope.lockrequired = !! data.lockcode;
       data.lockcode = null;
       $scope.aggregator = data;
       $scope.rssUrl = $scope.sitePrefix + '/aggregator/' + common.encodeAggregatorName(name) + '.rss';

@@ -152,6 +152,7 @@ function listAggregators(callback) {
           x.id = null;
           x.browsable = (x.browsable ? true : false);
           x.lockcode = (x.lockcode ? true : false);
+          console.log(x);
         });
         callback(null, result);
       } catch (e) {
