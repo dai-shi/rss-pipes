@@ -1,14 +1,17 @@
 .container
   .row
-    .span8
+    .span6
       a.btn.btn-warning(ng-href="#/edit")
         i.icon-edit.icon-white
         span.btn-label= (lang === 'ja' ? '新規作成' : 'Create New')
+    .span2
+      - var searchLabel = (lang === 'ja' ? '検索...' : 'Search...')
+      input.span2(type="text", placeholder=searchLabel, ng-model="query")
   .row
     .separator.span8
   .row
     .span8
-      .agg-item(ng-repeat="aggregator in aggregators")
+      .agg-item(ng-repeat="aggregator in aggregators | filter:query")
         span.link-label= (lang === 'ja' ? 'RSSのURL' : 'RSS Link')
         input.span7(type="text", ng-init="aggregator.displayUrl=aggregator.rssUrl", ng-model="aggregator.displayUrl", ng-change="aggregator.displayUrl=aggregator.rssUrl")
         h4(ng-bind="aggregator.name")
