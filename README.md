@@ -21,5 +21,4 @@ TODOs
 -----
 
 * Garbage collection of filters (that are not used for a week)
-* Search filters
 * Cache control
