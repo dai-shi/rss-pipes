@@ -167,6 +167,7 @@ app.get(new RegExp('^/rest/aggregators/(.+)$'), function(req, res) {
       console.log('failed in getAggregator:', err);
       res.send(500, 'failed getting an aggregator');
     } else {
+      res.header('Access-Control-Allow-Origin', '*');
       res.json(result);
     }
   });
