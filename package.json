@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "author": "Daishi Kato <daishi@axlight.com>",
   "dependencies": {
-    "express": "~3.1.0",
+    "express": "~3.1.2",
     "rss": "0.0.4",
     "jade": "~0.28.2",
     "jugglingdb": "~0.2.0-23",
