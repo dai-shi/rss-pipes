@@ -148,7 +148,7 @@ function listAggregators(callback) {
       callback(err);
     } else {
       try {
-        result.forEach(function(x) {
+        result.reverse().forEach(function(x) {
           x.id = null;
           x.browsable = (x.browsable ? true : false);
           x.lockcode = (x.lockcode ? true : null);
