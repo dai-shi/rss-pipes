@@ -4,9 +4,7 @@
   "version": "0.1.0",
   "author": "Daishi Kato <daishi@axlight.com>",
   "dependencies": {
-    "express": "~3.1.2",
     "rss": "0.0.4",
-    "jade": "~0.28.2",
     "jugglingdb": "~0.2.0-23",
     "jugglingdb-postgres": "0.0.1-5",
     "feedparser": "~0.13.4",
@@ -14,7 +12,9 @@
     "request": "~2.16.6",
     "esprima": "~1.0.2",
     "underscore": "~1.4.4",
-    "escodegen": "0.0.20"
+    "escodegen": "0.0.20",
+    "express": "~3.4.0",
+    "jade": "~0.35.0"
   },
   "devDependencies": {
     "jugglingdb-sqlite3": "*",
