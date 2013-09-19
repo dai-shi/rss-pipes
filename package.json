@@ -5,8 +5,6 @@
   "author": "Daishi Kato <daishi@axlight.com>",
   "dependencies": {
     "rss": "0.0.4",
-    "jugglingdb": "~0.2.0-23",
-    "jugglingdb-postgres": "0.0.1-5",
     "feedparser": "~0.13.4",
     "async": "~0.2.6",
     "request": "~2.16.6",
@@ -14,7 +12,9 @@
     "underscore": "~1.4.4",
     "escodegen": "0.0.20",
     "express": "~3.4.0",
-    "jade": "~0.35.0"
+    "jade": "~0.35.0",
+    "jugglingdb": "~0.2.0-40",
+    "jugglingdb-postgres": "0.0.1-7"
   },
   "devDependencies": {
     "jugglingdb-sqlite3": "*",
