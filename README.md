@@ -12,10 +12,9 @@ Filters are written in JavaScript and modifiable through web browsers.
 Access
 ------
 
-<http://rss-pipes.herokuapp.com/static/main.html>
+Please visit:
 
-Japanese page is [here](https://dai-shi.github.com/rss-pipes/)
-
+<http://rss-pipes.herokuapp.com/>
 
 TODOs
 -----

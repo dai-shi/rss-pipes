@@ -122,7 +122,15 @@ function generateRss(aggregatorName, options, callback) {
 }
 
 app.get('/', function(req, res) {
-  res.redirect('http://dai-shi.github.com/rss-pipes/');
+  var lang = '';
+  if (req.headers['accept-language']) {
+    lang = req.headers['accept-language'].substring(0, 2);
+  }
+  if (lang === 'ja') {
+    res.redirect('http://dai-shi.github.com/rss-pipes/index-ja.html');
+  } else {
+    res.redirect('http://dai-shi.github.com/rss-pipes/');
+  }
 });
 
 app.get(new RegExp('^/aggregator/(.+)\\.rss$'), function(req, res) {
