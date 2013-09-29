@@ -20,7 +20,7 @@
     <header>
       <div class="inner">
         <h1>RSS Pipes</h1>
-        <h2>みんなでつくるRSSフィード</h2>
+        <h2>A system that allows everyone to freely create and edit RSS aggregators</h2>
         <a href="https://github.com/dai-shi/rss-pipes" class="button"><small>View project on</small>GitHub</a>
       </div>
     </header>
@@ -30,47 +30,39 @@
         <section id="main-content">
           <h1>RSS Pipes</h1>
 
-<p>複数のRSSを束ねて一つのRSSにするWebサービスです。
-類似のサービスも多いですが、JavaScriptでフィルターを書けるのが特徴です。</p>
+<p>This is a web service for RSS aggregators that is to combine several RSS feeds to one feed.
+The main feature of this service is that filters of aggregators are written in JavaScript, just like Wiki.</p>
 
-<h2>使い方</h2>
+<h2>How to use</h2>
+
+<p>Visit</p>
 
 <p><a href="http://rss-pipes.herokuapp.com/static/main.html">http://rss-pipes.herokuapp.com/static/main.html</a></p>
 
-<p>にアクセスすると、既に作成されたRSSの一覧が表示されます。
-利用したいものがあれば、RSSのURLをコピーしてお使いのRSSリーダーに登録します。</p>
+<p>and you will see list of RSS aggregators already created.
+You can simply use an existing RSS aggregator by copying the URL into your favorite RSS reader.</p>
 
-<p>「新規作成」ボタンを押すと新しくRSSが作成できます。
-分かりやすい名前と説明文を書いてください。一度つけた名前は変更できません。</p>
+<p>You can also create a new aggregagor by clicking "Create" button.
+Please input understandable name and description. The name cannot be changed once created.</p>
 
-<p>使用者のタイプ毎の使い方を説明します。</p>
+<p>The followings explain how to use the service for different user types.</p>
 
-<h4>JavaScriptが全く使えない方</h4>
+<h4>Users who don't write JavaScript at all</h4>
 
-<p>そんなあなたはフィルターを書く必要はありません。名前と説明文とRSSのフィードURLを入力するだけでOKです。
-フィードURLを一つ入れるだけでは意味がありませんので、複数のフィードURLを行単位で入力してください。</p>
+<p>You don't have to write filters. Just input a name, a description and RSS URLs, then you will get a combined RSS feed.</p>
 
-<h4>JavaScriptがちょこっとだけ使える方</h4>
+<h4>Users who can write JavaScript a little</h4>
 
-<p>フィルターのインポート機能があります。これはあらかじめ用意されたフィルターを呼び出して、使うものです。
-ちょこっとだけ変更すると便利なものもありますので、必要に応じて修正してみてください。</p>
+<p>You can use the filter import function, which loads some pre-coded filters. You can modify a pre-coded filter as needed. </p>
 
-<h4>JavaScriptがもうちょっと使える方</h4>
+<h4>Users who can write JavaScript a little more</h4>
 
-<p>あらかじめ用意されたフィルターや他のRSSのフィルターを参照（「編集」ボタンを押すと詳細が見えます）して、
-真似して（コピペして）フィルターを作ってみましょう。</p>
+<p>Copy a pre-coded filter or a filter in an existing aggregator, and modify it as you like.</p>
 
-<h4>JavaScriptがそれなりに使える方</h4>
+<h4>Users who are JavaScript programmers</h4>
 
-<p>インポート機能のもとになるフィルターを作りませんか？Gistに登録して、IDをIssueで連絡してください。
-必要であれば、コードの中にライセンス文をコメントで記載してください。</p>
+<p>Would you write a pre-coded filter for import? If you create one on Gist, notify it by GitHub issue.</p>
 
-<h2>TODOs</h2>
-
-<ul>
-<li>1週間以上使われていないRSSの自動削除</li>
-<li>元フィードのキャッシュ</li>
-</ul>
         </section>
 
         <aside id="sidebar">
