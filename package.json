@@ -1,20 +1,20 @@
 {
   "name": "rss-pipes",
   "description": "RSS feed aggregator by Node.js",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Daishi Kato <daishi@axlight.com>",
   "dependencies": {
-    "rss": "0.0.4",
-    "feedparser": "~0.13.4",
-    "async": "~0.2.6",
-    "request": "~2.16.6",
-    "esprima": "~1.0.2",
-    "underscore": "~1.4.4",
-    "escodegen": "0.0.20",
     "express": "~3.4.0",
     "jade": "~0.35.0",
     "jugglingdb": "~0.2.0-40",
-    "jugglingdb-postgres": "0.0.1-7"
+    "jugglingdb-postgres": "0.0.1-7",
+    "underscore": "~1.4.4",
+    "async": "~0.2.9",
+    "esprima": "~1.0.4",
+    "escodegen": "0.0.20",
+    "request": "~2.16.6",
+    "rss": "0.0.4",
+    "feedparser": "~0.13.4"
   },
   "devDependencies": {
     "jugglingdb-sqlite3": "*",
@@ -32,6 +32,6 @@
   ],
   "license": "BSD",
   "engines": {
-    "node": "~0.8.21"
+    "node": "0.10.15"
   }
 }
