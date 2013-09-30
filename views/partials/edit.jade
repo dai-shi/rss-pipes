@@ -23,11 +23,11 @@
 
           label= (lang === 'ja' ? 'フィルタースクリプト' : 'Filter Script')
           select(ng-model="gist_id", ng-change="importFilterFromGist()")
-            option(value="") フィルターのインポート
-            option(value="dai-shi/5276006")  タイトル中のキーワードで絞り込むフィルター
-            option(value="dai-shi/5274427")  初めの10件に絞り込むフィルター
-            option(value="dai-shi/5276606")  タイトルからURLを抜き出すフィルター
-            option(value="dai-shi/5276584")  AD,PRエントリーを除去するフィルター
+            option(value="")= (lang === 'ja' ? 'フィルターのインポート' : 'Import a filter')
+            option(value="dai-shi/5276006")= (lang === 'ja' ? 'タイトル中のキーワードで絞り込むフィルター' : 'filter by a keyword in a title')
+            option(value="dai-shi/5274427")= (lang === 'ja' ? '初めの10件に絞り込むフィルター' : 'limit to first 10 entries')
+            option(value="dai-shi/5276606")= (lang === 'ja' ? 'タイトルからURLを抜き出すフィルター' : 'get a URL from a title')
+            option(value="dai-shi/5276584")= (lang === 'ja' ? 'AD,PRエントリーを除去するフィルター' : 'remove AD or PR entries')
           img.import-spinner(src="image/spinner.gif", ng-show="gist_id")
           .codemirror-container
             textarea(ui-codemirror="{mode: 'javascript', fixedGutter: false, theme: 'solarized light'}", ng-model="aggregator.filter")
