@@ -61,7 +61,7 @@
         ul
           li(ng-repeat="itemEle in rssDoc.find('item').get()")
             a(target="_blank", ng-href="{{jQuery(itemEle).find('link').text()}}", ng-bind="jQuery(itemEle).find('title').text()")
-  script
+  script.
     setTimeout(function() {
       var ele = $('.codemirror-container');
       if ($('body').outerWidth() <= 767) {
