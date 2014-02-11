@@ -28,6 +28,8 @@
             option(value="dai-shi/5274427")= (lang === 'ja' ? '初めの10件に絞り込むフィルター' : 'limit to first 10 entries')
             option(value="dai-shi/5276606")= (lang === 'ja' ? 'タイトルからURLを抜き出すフィルター' : 'get a URL from a title')
             option(value="dai-shi/5276584")= (lang === 'ja' ? 'AD,PRエントリーを除去するフィルター' : 'remove AD or PR entries')
+            option(value="dai-shi/5309864")= (lang === 'ja' ? 'タイトルのキーワードを目立たせるフィルター' : 'highlight keywords in title')
+            option(value="dai-shi/8934864")= (lang === 'ja' ? 'URLのリダイレクトをたどるフィルター' : 'follow URL redirects')
           img.import-spinner(src="image/spinner.gif", ng-show="gist_id")
           .codemirror-container
             textarea(ui-codemirror="{mode: 'javascript', fixedGutter: false, theme: 'solarized light'}", ng-model="aggregator.filter")

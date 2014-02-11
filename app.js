@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2013, Daishi Kato <daishi@axlight.com>
+  Copyright (C) 2013-2014, Daishi Kato <daishi@axlight.com>
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,6 +33,7 @@ var async = require('async');
 var feedparser = require('feedparser');
 var rss = require('rss');
 var request = require('request');
+var Q = require('q');
 var datastore = require('./datastore.js');
 
 var makeSafeCode = require('./safeCode.js').makeSafeCode;
@@ -49,9 +50,27 @@ app.configure(function() {
   app.use(express.errorHandler());
 });
 
+function getRedirectURL(url) {
+  var deferred = Q.defer();
+  request({
+    url: url,
+    followRedirect: false
+  }, function(err, res) {
+    if (err) {
+      console.log('failed to get redirect url:', err);
+      deferred.resolve(url);
+    } else {
+      deferred.resolve(res.headers.location || url);
+    }
+  });
+  return deferred.promise;
+}
+
 function filterArticles(articles, filterStr) {
   var sandbox = {
-    articles: articles
+    articles: articles,
+    Q: Q,
+    getRedirectURL: getRedirectURL
   };
   var varname = 'counter' + Math.random().toString().substring(2);
   sandbox[varname] = 0;
@@ -98,25 +117,29 @@ function generateRss(aggregatorName, options, callback) {
           }
         }
       }
-      var feed_url = sitePrefix + '/aggregator/' + encodeAggregatorName(aggregatorName) + '.rss';
-      var site_url = sitePrefix + '/static/main.html#/edit?name=' + encodeURIComponent(aggregatorName);
-      var feed = new rss({
-        title: aggregatorName + ' by RSS Pipes',
-        description: agg.description,
-        feed_url: feed_url,
-        site_url: site_url
-      });
-      allArticles.forEach(function(article) {
-        feed.item({
-          title: article.title,
-          description: article.description,
-          url: article.link,
-          guid: article.guid,
-          author: article.author,
-          date: article.date
+      (allArticles.then ? allArticles : Q.fcall(function() {
+        return allArticles;
+      })).then(function(allArticles) {
+        var feed_url = sitePrefix + '/aggregator/' + encodeAggregatorName(aggregatorName) + '.rss';
+        var site_url = sitePrefix + '/static/main.html#/edit?name=' + encodeURIComponent(aggregatorName);
+        var feed = new rss({
+          title: aggregatorName + ' by RSS Pipes',
+          description: agg.description,
+          feed_url: feed_url,
+          site_url: site_url
         });
+        allArticles.forEach(function(article) {
+          feed.item({
+            title: article.title,
+            description: article.description,
+            url: article.link,
+            guid: article.guid,
+            author: article.author,
+            date: article.date
+          });
+        });
+        callback(null, feed.xml());
       });
-      callback(null, feed.xml());
     });
   });
 }
