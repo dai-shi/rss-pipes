@@ -61,7 +61,7 @@ var AggregatorEditCtrl = ['$scope', '$routeParams', '$http', 'Aggregator', funct
       name: name
     }, function(data) {
       $scope.lockrequired = !! data.lockcode;
-      data.lockcode = null;
+      delete data.lockcode;
       $scope.aggregator = data;
       $scope.rssUrl = $scope.sitePrefix + '/aggregator/' + common.encodeAggregatorName(name) + '.rss';
       $scope.getRssContent();
