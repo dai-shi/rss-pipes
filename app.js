@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2013-2014, Daishi Kato <daishi@axlight.com>
+  Copyright (C) 2013-2015, Daishi Kato <daishi@axlight.com>
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -24,7 +24,9 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/* jshint evil: true */
+/* jshint undef: true, unused: true, latedef: true */
+/* jshint quotmark: single, eqeqeq: true */
+/* jshint node: true */
 
 var vm = require('vm');
 var path = require('path');
@@ -85,62 +87,62 @@ function generateRss(aggregatorName, options, callback) {
     }
     var urls = agg.feeds.split('\n');
     async.map(urls, function(url, cb) {
-      if (!url) {
-        cb([]);
-        return;
-      }
-      try {
-        feedparser.parseUrl(url, function(err, meta, articles) {
-          if (err) {
-            console.log('error by aggregator[1] "' + aggregatorName + '" in parsing "' + url + '":', err);
-            cb(null, []);
-            return;
-          }
-          cb(null, articles);
-        });
-      } catch (err) {
-        console.log('error by aggregator[2] "' + aggregatorName + '" in parsing "' + url + '":', err);
-        cb(null, []);
-      }
-    },
-
-    function(err, articlesArray) {
-      // we assume err is always null.
-      var allArticles = [].concat.apply([], articlesArray);
-      if (agg.filter) {
+        if (!url) {
+          cb([]);
+          return;
+        }
         try {
-          allArticles = filterArticles(allArticles, agg.filter);
-        } catch (e) {
-          if (options.debug) {
-            callback(e);
-            return;
+          feedparser.parseUrl(url, function(err, meta, articles) {
+            if (err) {
+              console.log('error by aggregator[1] "' + aggregatorName + '" in parsing "' + url + '":', err);
+              cb(null, []);
+              return;
+            }
+            cb(null, articles);
+          });
+        } catch (err) {
+          console.log('error by aggregator[2] "' + aggregatorName + '" in parsing "' + url + '":', err);
+          cb(null, []);
+        }
+      },
+
+      function(err, articlesArray) {
+        // we assume err is always null.
+        var allArticles = [].concat.apply([], articlesArray);
+        if (agg.filter) {
+          try {
+            allArticles = filterArticles(allArticles, agg.filter);
+          } catch (e) {
+            if (options.debug) {
+              callback(e);
+              return;
+            }
           }
         }
-      }
-      (allArticles.then ? allArticles : Q.fcall(function() {
-        return allArticles;
-      })).then(function(allArticles) {
-        var feed_url = sitePrefix + '/aggregator/' + encodeAggregatorName(aggregatorName) + '.rss';
-        var site_url = sitePrefix + '/static/main.html#/edit?name=' + encodeURIComponent(aggregatorName);
-        var feed = new rss({
-          title: aggregatorName + ' by RSS Pipes',
-          description: agg.description,
-          feed_url: feed_url,
-          site_url: site_url
-        });
-        allArticles.forEach(function(article) {
-          feed.item({
-            title: article.title,
-            description: article.description,
-            url: article.link,
-            guid: article.guid,
-            author: article.author,
-            date: article.date
+        (allArticles.then ? allArticles : Q.fcall(function() {
+          return allArticles;
+        })).then(function(allArticles) {
+          var feed_url = sitePrefix + '/aggregator/' + encodeAggregatorName(aggregatorName) + '.rss';
+          var site_url = sitePrefix + '/static/main.html#/edit?name=' + encodeURIComponent(aggregatorName);
+          var feed = new rss({
+            title: aggregatorName + ' by RSS Pipes',
+            description: agg.description,
+            feed_url: feed_url,
+            site_url: site_url
           });
+          allArticles.forEach(function(article) {
+            feed.item({
+              title: article.title,
+              description: article.description,
+              url: article.link,
+              guid: article.guid,
+              author: article.author,
+              date: article.date
+            });
+          });
+          callback(null, feed.xml());
         });
-        callback(null, feed.xml());
       });
-    });
   });
 }
 
