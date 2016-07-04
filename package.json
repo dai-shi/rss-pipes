@@ -3,6 +3,10 @@
   "description": "RSS feed aggregator by Node.js",
   "version": "0.3.0",
   "author": "Daishi Kato <daishi@axlight.com>",
+  "scripts": {
+    "test": "npm run eslint",
+    "eslint": "eslint ."
+  },
   "dependencies": {
     "express": "~3.4.0",
     "jade": "~0.35.0",
@@ -18,9 +22,10 @@
     "q": "~1.0.0"
   },
   "devDependencies": {
+    "eslint": "^3.0.0",
     "jugglingdb-sqlite3": "*",
-    "mocha": "*",
-    "karma": "*"
+    "karma": "*",
+    "mocha": "*"
   },
   "repository": {
     "type": "git",
@@ -31,7 +36,7 @@
     "rss",
     "atom"
   ],
-  "license": "BSD",
+  "license": "BSD-2-Clause",
   "engines": {
     "node": "0.10.40"
   }
