@@ -24,10 +24,6 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/* jshint undef: true, unused: true, latedef: true */
-/* jshint quotmark: single, eqeqeq: true */
-/* jshint node: true */
-
 var vm = require('vm');
 var path = require('path');
 var express = require('express');
@@ -86,7 +82,9 @@ function generateRss(aggregatorName, options, callback) {
       return;
     }
     var urls = agg.feeds.split('\n');
-    async.map(urls, function(url, cb) {
+    async.map(
+      urls,
+      function(url, cb) {
         if (!url) {
           cb([]);
           return;
@@ -105,7 +103,6 @@ function generateRss(aggregatorName, options, callback) {
           cb(null, []);
         }
       },
-
       function(err, articlesArray) {
         // we assume err is always null.
         var allArticles = [].concat.apply([], articlesArray);

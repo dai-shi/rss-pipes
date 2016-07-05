@@ -46,7 +46,7 @@ root.unshift = function(lst, itm) {
 };
 
 root.ast_loop_checker = function(varname, limit) {
-  var ast = root.parse("if (" + varname + "++ > " + limit + ") throw new Error('too many loops');");
+  var ast = root.parse('if (' + varname + '++ > ' + limit + ') throw new Error(\'too many loops\');');
   return ast.body;
 };
 

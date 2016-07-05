@@ -24,10 +24,6 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/* jshint undef: true, unused: true, latedef: true */
-/* jshint quotmark: single, eqeqeq: true */
-/* jshint node: true */
-
 var aggregatorNameRegExp = require('./public/js/common.js').aggregatorNameRegExp;
 
 var Schema = require('jugglingdb').Schema;
@@ -80,8 +76,8 @@ function getAggregator(name, callback) {
     } else {
       try {
         result.id = null;
-        result.browsable = (result.browsable ? true : false);
-        result.lockcode = (result.lockcode ? true : null);
+        result.browsable = !!result.browsable;
+        result.lockcode = result.lockcode ? true : null;
         callback(null, result);
       } catch (e) {
         callback(e);
@@ -98,7 +94,7 @@ function existsAggregator(name, callback) {
       callback(err);
     } else {
       try {
-        callback(null, (result ? true : false));
+        callback(null, !!result);
       } catch (e) {
         callback(e);
       }
@@ -131,8 +127,8 @@ function createNewAggregator(params, callback) {
       } else {
         try {
           result.id = null;
-          result.browsable = (result.browsable ? true : false);
-          result.lockcode = (result.lockcode ? true : null);
+          result.browsable = !!result.browsable;
+          result.lockcode = result.lockcode ? true : null;
           callback(null, result);
         } catch (e) {
           callback(e);
@@ -154,8 +150,8 @@ function listAggregators(callback) {
       try {
         result.reverse().forEach(function(x) {
           x.id = null;
-          x.browsable = (x.browsable ? true : false);
-          x.lockcode = (x.lockcode ? true : null);
+          x.browsable = !!x.browsable;
+          x.lockcode = x.lockcode ? true : null;
         });
         callback(null, result);
       } catch (e) {
@@ -201,8 +197,8 @@ function updateAggregator(params, callback) {
       } else {
         try {
           result.id = null;
-          result.browsable = (result.browsable ? true : false);
-          result.lockcode = (result.lockcode ? true : null);
+          result.browsable = !!result.browsable;
+          result.lockcode = result.lockcode ? true : null;
           callback(null, result);
         } catch (e) {
           callback(e);
