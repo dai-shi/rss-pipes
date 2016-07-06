@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2013-2015, Daishi Kato <daishi@axlight.com>
+  Copyright (C) 2013-2016, Daishi Kato <daishi@axlight.com>
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -24,11 +24,8 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/* jshint undef: true, unused: true, latedef: true */
-/* jshint quotmark: single, eqeqeq: true */
-/* jshint devel: true, browser: true */
-
 /* global angular, jQuery, $, common */
+/* eslint-env browser */
 
 var AggregatorListCtrl = ['$scope', '$location', 'Aggregator',
   function($scope, $location, Aggregator) {
