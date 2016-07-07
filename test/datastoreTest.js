@@ -1,8 +1,7 @@
-/* global before: true */
+/* eslint-env mocha */
 
 var assert = require('assert');
 var fs = require('fs');
-
 
 describe('basic test for datastore', function() {
   var datastore;
