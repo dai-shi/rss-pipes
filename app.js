@@ -34,7 +34,6 @@ var request = require('request');
 var Q = require('q');
 var datastore = require('./datastore.js');
 
-var makeSafeCode = require('./safeCode.js').makeSafeCode;
 var encodeAggregatorName = require('./public/js/common.js').encodeAggregatorName;
 
 var sitePrefix = process.env.SITE_PREFIX || 'http://rss-pipes.herokuapp.com';
@@ -70,9 +69,9 @@ function filterArticles(articles, filterStr) {
     Q: Q,
     getRedirectURL: getRedirectURL
   };
-  var varname = 'counter' + Math.random().toString().substring(2);
-  sandbox[varname] = 0;
-  return vm.runInNewContext('(' + makeSafeCode(filterStr, varname) + ')(articles);', sandbox);
+  return vm.runInNewContext('(' + filterStr + ')(articles);', sandbox, {
+    timeout: 1000
+  });
 }
 
 function generateRss(aggregatorName, options, callback) {
