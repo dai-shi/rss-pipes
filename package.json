@@ -14,8 +14,6 @@
     "jugglingdb-postgres": "0.0.1-7",
     "underscore": "~1.4.4",
     "async": "~0.2.9",
-    "esprima": "~1.0.4",
-    "escodegen": "0.0.20",
     "request": "~2.33.0",
     "rss": "0.0.4",
     "feedparser": "~0.13.4",
