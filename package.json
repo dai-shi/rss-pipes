@@ -4,8 +4,10 @@
   "version": "0.3.0",
   "author": "Daishi Kato <daishi@axlight.com>",
   "scripts": {
-    "test": "npm run eslint",
-    "eslint": "eslint *.js public/js/*.js test/*.js"
+    "start": "node app.js",
+    "test": "npm run eslint && npm run mocha",
+    "eslint": "eslint *.js public/js/*.js test/*.js",
+    "mocha": "mocha"
   },
   "dependencies": {
     "express": "~3.4.0",
