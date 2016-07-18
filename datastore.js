@@ -65,6 +65,17 @@ var Aggregator = schema.define('Aggregator', {
 
 schema.autoupdate();
 
+function createResultAggregator(agg) {
+  return {
+    name: agg.name,
+    description: agg.description,
+    feeds: agg.feeds,
+    filter: agg.filter,
+    browsable: !!agg.browserble,
+    lockcode: agg.lockcode ? true : null
+  };
+}
+
 function getAggregator(name, callback) {
   Aggregator.findOne({
     where: {
@@ -75,10 +86,7 @@ function getAggregator(name, callback) {
       callback(err);
     } else {
       try {
-        result.id = null;
-        result.browsable = !!result.browsable;
-        result.lockcode = result.lockcode ? true : null;
-        callback(null, result);
+        callback(null, createResultAggregator(result));
       } catch (e) {
         callback(e);
       }
@@ -126,10 +134,7 @@ function createNewAggregator(params, callback) {
         callback(err);
       } else {
         try {
-          result.id = null;
-          result.browsable = !!result.browsable;
-          result.lockcode = result.lockcode ? true : null;
-          callback(null, result);
+          callback(null, createResultAggregator(result));
         } catch (e) {
           callback(e);
         }
@@ -196,10 +201,7 @@ function updateAggregator(params, callback) {
         callback(err);
       } else {
         try {
-          result.id = null;
-          result.browsable = !!result.browsable;
-          result.lockcode = result.lockcode ? true : null;
-          callback(null, result);
+          callback(null, createResultAggregator(result));
         } catch (e) {
           callback(e);
         }
