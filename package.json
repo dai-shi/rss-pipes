@@ -23,9 +23,9 @@
   },
   "devDependencies": {
     "eslint": "^3.0.0",
-    "jugglingdb-sqlite3": "*",
+    "jugglingdb-sqlite3": "^0.1.0",
     "karma": "*",
-    "mocha": "*"
+    "mocha": "^2.5.3"
   },
   "repository": {
     "type": "git",
