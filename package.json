@@ -12,11 +12,11 @@
   "dependencies": {
     "async": "^0.2.10",
     "express": "^3.4.8",
-    "feedparser": "~0.13.4",
+    "feedparser": "^0.13.4",
     "jade": "^0.35.0",
     "jugglingdb": "0.2.12",
     "jugglingdb-postgres": "0.0.1-7",
-    "q": "^1.0.1",
+    "q": "^1.4.1",
     "request": "^2.33.0",
     "rss": "0.0.4"
   },
