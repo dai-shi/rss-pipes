@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2013-2015, Daishi Kato <daishi@axlight.com>
+  Copyright (C) 2013-2016, Daishi Kato <daishi@axlight.com>
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@ var datastore = require('./datastore.js');
 
 var encodeAggregatorName = require('./public/js/common.js').encodeAggregatorName;
 
-var sitePrefix = process.env.SITE_PREFIX || 'http://rss-pipes.herokuapp.com';
+var sitePrefix = process.env.SITE_PREFIX || 'http://rss-pipes.axlight.com';
 
 var app = express();
 app.configure(function() {
@@ -148,9 +148,9 @@ app.get('/', function(req, res) {
     lang = req.headers['accept-language'].substring(0, 2);
   }
   if (lang === 'ja') {
-    res.redirect('http://dai-shi.github.com/rss-pipes/index-ja.html');
+    res.redirect('http://dai-shi.github.io/rss-pipes/index-ja.html');
   } else {
-    res.redirect('http://dai-shi.github.com/rss-pipes/');
+    res.redirect('http://dai-shi.github.io/rss-pipes/');
   }
 });
 

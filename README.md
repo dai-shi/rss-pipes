@@ -14,7 +14,7 @@ Access
 
 Please visit:
 
-<http://rss-pipes.herokuapp.com/>
+<http://rss-pipes.axlight.com/>
 
 TODOs
 -----
