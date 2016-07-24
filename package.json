@@ -18,7 +18,7 @@
     "jugglingdb-postgres": "^0.1.0",
     "q": "^1.4.1",
     "request": "^2.33.0",
-    "rss": "0.0.4"
+    "rss": "^1.2.1"
   },
   "devDependencies": {
     "eslint": "^3.0.0",
